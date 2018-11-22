@@ -1,5 +1,5 @@
 
-module.exports = (db) => {
-	Chart: require('./Chart')(db),
-	ExportJob: require('./ExportJob')(db),
+module.exports = {
+    Chart: require('./Chart'),
+    ExportJob: require('./ExportJob'),
 }
