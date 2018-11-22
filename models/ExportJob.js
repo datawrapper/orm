@@ -1,5 +1,5 @@
 const SQ = require('sequelize');
-const {db} = require('../db');
+const {db} = require('../index');
 
 const ExportJob = db.define('export_job', {
     id: {type:SQ.INTEGER, primaryKey:true, autoIncrement: true},

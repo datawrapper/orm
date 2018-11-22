@@ -1,5 +1,5 @@
 const SQ = require('sequelize');
-const {db} = require('../db');
+const {db} = require('../index');
 
 const Chart = db.define('chart', {
     id: { type: SQ.STRING(5), primaryKey: true },

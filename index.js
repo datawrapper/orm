@@ -1,7 +1,6 @@
 const Sequelize = require('sequelize');
-const _ = require('./db');
 
-module.exports = {
+const ORM = {
     init(config) {
         const sequelize = new Sequelize(
             config.database,
@@ -13,6 +12,14 @@ module.exports = {
                 operatorsAliases: false
             },
         );
-        _.db = sequelize;
+        ORM.db = sequelize;
+    },
+    db: {
+        define() {
+            console.error('you need to initialize the database first!');
+            process.exit(-1);
+        }
     }
 }
+
+module.exports = ORM;
