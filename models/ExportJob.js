@@ -3,6 +3,7 @@ const {db} = require('../index');
 
 const ExportJob = db.define('export_job', {
     id: {type:SQ.INTEGER, primaryKey:true, autoIncrement: true},
+    key: SQ.STRING,
     priority: SQ.INTEGER,
     user_id: SQ.INTEGER,
     chart_id: SQ.STRING(5),
@@ -13,7 +14,9 @@ const ExportJob = db.define('export_job', {
     done_at: SQ.DATE,
 
     last_task: SQ.INTEGER,
-    data: SQ.JSON
+    tasks: SQ.JSON,
+
+    log: SQ.JSON
 }, {
     timestamps: false,
     tableName: 'export_job'
