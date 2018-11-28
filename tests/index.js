@@ -47,28 +47,6 @@ User.findOne({where:{email:'gka@vis4.net'}}).then(me => {
 //      })
 // });
 
-// Team.findAll({limit:10}).then(rows => {
-//     rows.forEach(f => {
-//         f.getUsers().then(users => {
-//             console.log(f.name, users.map(u => u.email));
-//         });
-//         // console.log(f.get('team_role'));
-//     })
-// });
-
-// Folder.findAll({limit:10}).then(rows => {
-//     rows.forEach(f => {
-//         // console.log(f.toJSON());
-//         f.getParent().then(parent => {
-//             if (parent) console.log(f.name, 'has parent', parent.name);
-//         });
-//         f.getChildren().then(children => {
-//             if (children) console.log(f.name, 'has children', children.map(c => c.name));
-//         })
-//         // console.log(f.get('team_role'));
-//     })
-// });
-
 
 setTimeout(() => {
     ORM.db.close();

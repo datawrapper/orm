@@ -21,6 +21,6 @@ const Folder = db.define('folder', {
 });
 
 Folder.belongsTo(Folder, { as: 'parent' });
-Folder.hasMany(Folder, { as: 'children' });
+Folder.hasMany(Folder, { as: 'children', foreignKey: 'parent_id' });
 
 module.exports = Folder;
