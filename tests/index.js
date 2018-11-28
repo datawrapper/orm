@@ -7,17 +7,18 @@ ORM.init(config);
 
 const {Chart, ExportJob, Folder, Team, User, Theme} = require('../models');
 
-// ORM.db.sync().then(() => {
-// User.findOne({where:{email:'gka@vis4.net'}}).then(me => {
-//     // for (var k in me) {
-//     //     console.log(k);
-//     // }
-//     console.log(me.toJSON());
-//     me.getCharts({limit:10}).then(charts => {
-//         console.log(charts.map(c => c.id));
-//     })
-// });
-// });
+User.findOne({where:{email:'gka@vis4.net'}}).then(me => {
+    // for (var k in me) {
+    //     console.log(k);
+    // }
+    console.log(me.toJSON());
+    me.getThemes({limit:10}).then(rows => {
+        console.log('themes -->', rows.map(c => c.id));
+        rows[0].getUsers().then(r => {
+            console.log('   users --> ', r.map(c =>c.id));
+        })
+    })
+});
 
 // Chart.findAll({
 //     include: [{model:Folder}],
@@ -55,18 +56,18 @@ const {Chart, ExportJob, Folder, Team, User, Theme} = require('../models');
 //     })
 // });
 
-Folder.findAll({limit:10}).then(rows => {
-    rows.forEach(f => {
-        // console.log(f.toJSON());
-        f.getParent().then(parent => {
-            if (parent) console.log(f.name, 'has parent', parent.name);
-        });
-        f.getChildren().then(children => {
-            if (children) console.log(f.name, 'has children', children.map(c => c.name));
-        })
-        // console.log(f.get('team_role'));
-    })
-});
+// Folder.findAll({limit:10}).then(rows => {
+//     rows.forEach(f => {
+//         // console.log(f.toJSON());
+//         f.getParent().then(parent => {
+//             if (parent) console.log(f.name, 'has parent', parent.name);
+//         });
+//         f.getChildren().then(children => {
+//             if (children) console.log(f.name, 'has children', children.map(c => c.name));
+//         })
+//         // console.log(f.get('team_role'));
+//     })
+// });
 
 
 setTimeout(() => {

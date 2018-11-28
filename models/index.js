@@ -17,5 +17,6 @@ require('./assoc/folder-chart');
 require('./assoc/folder-team');
 require('./assoc/folder-user');
 require('./assoc/user-chart');
+require('./assoc/user-theme');
 
 module.exports = models;
