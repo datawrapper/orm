@@ -7,10 +7,7 @@ const Chart = db.define('chart', {
     title: SQ.STRING,
     theme: SQ.STRING,
 
-    author_id: SQ.INTEGER,
     guest_session: SQ.STRING,
-    organization_id: SQ.STRING(128),
-    // folder_id: {type: SQ.INTEGER, field: 'in_folder'},
 
     created_at: SQ.DATE,
     last_modified_at: SQ.DATE,
@@ -25,7 +22,6 @@ const Chart = db.define('chart', {
 
     forkable: SQ.BOOLEAN,
     is_fork: SQ.BOOLEAN,
-    forked_from: SQ.STRING(5),
 
     metadata: SQ.JSON,
     language: SQ.STRING(5),
@@ -36,7 +32,15 @@ const Chart = db.define('chart', {
 });
 
 const Folder = require('./Folder');
+const User = require('./User');
+const Team = require('./Team');
 
+Chart.belongsTo(User, {foreignKey: 'author_id'});
 Chart.belongsTo(Folder, {foreignKey: 'in_folder'});
+Chart.belongsTo(Team, {foreignKey: 'organization_id'});
+
+Chart.belongsTo(Chart, {
+    foreignKey: 'forked_from',
+});
 
 module.exports = Chart;

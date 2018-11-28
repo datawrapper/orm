@@ -25,11 +25,10 @@ Folder.belongsTo(Folder, {
     foreignKey: 'parent_id',
 });
 
-// const User = require('./User');
+const User = require('./User');
 const Team = require('./Team');
 
-// Folder.belongsTo(User, { foreignKey: 'user_id', });
-
+Folder.belongsTo(User, { foreignKey: 'user_id', });
 Folder.belongsTo(Team, { foreignKey: 'org_id', });
 
 module.exports = Folder;

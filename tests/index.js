@@ -8,11 +8,7 @@ const {Chart, ExportJob, Folder, Team, User} = require('../models');
 
 // Chart.findAll({
 //     include: [{model:Folder}],
-//     where: {
-//         in_folder: {
-//             [Op.ne]: null
-//         }
-//     }
+//     where: { forked_from: {[Op.ne]: null} }
 // }).then(charts => {
 //     charts.slice(0,10).forEach(f => {
 //         console.log(f.id, f.folder.toJSON());
@@ -20,7 +16,7 @@ const {Chart, ExportJob, Folder, Team, User} = require('../models');
 // });
 
 
-User.findAll({limit:10}).then(rows => {
+Chart.findAll({limit:10, where: { forked_from: {[Op.ne]: null} }}).then(rows => {
     rows.forEach(r => {
         console.log(r.toJSON());
         // console.log(f.name, f.team ? f.team.toJSON() : null);
