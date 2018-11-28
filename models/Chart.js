@@ -9,8 +9,6 @@ const Chart = db.define('chart', {
 
     guest_session: SQ.STRING,
 
-    created_at: SQ.DATE,
-    last_modified_at: SQ.DATE,
     last_edit_step: SQ.INTEGER,
 
     published_at: SQ.DATE,
@@ -27,16 +25,15 @@ const Chart = db.define('chart', {
     language: SQ.STRING(5),
     external_data: SQ.STRING(),
 }, {
-    timestamps: false,
+    timestamps: true,
+    createdAt: 'created_at',
+    updatedAt: 'last_modified_at',
     tableName: 'chart'
 });
 
 const Folder = require('./Folder');
-const User = require('./User');
 const Team = require('./Team');
 
-Chart.belongsTo(User, {foreignKey: 'author_id'});
-Chart.belongsTo(Folder, {foreignKey: 'in_folder'});
 Chart.belongsTo(Team, {foreignKey: 'organization_id'});
 
 Chart.belongsTo(Chart, {

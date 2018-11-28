@@ -14,9 +14,6 @@ const ExportJob = db.define('export_job', {
     // current status of the job
     status: SQ.ENUM('queued', 'in_progress', 'done', 'failed'),
 
-    // when was the job created
-    created_at: SQ.DATE,
-
     // when was the status changed from queued to in_progress
     processed_at: SQ.DATE,
 
@@ -32,8 +29,10 @@ const ExportJob = db.define('export_job', {
     // a log file with debug and error messages from the client
     log: SQ.JSON
 }, {
-    timestamps: false,
-    tableName: 'export_job'
+    tableName: 'export_job',
+    timestamps: true,
+    createdAt: 'created_at',
+    updatedAt: false
 });
 
 const User = require('./User');

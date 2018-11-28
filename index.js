@@ -1,5 +1,7 @@
 const Sequelize = require('sequelize');
 
+// Sequelize.options.timestamps = false;
+
 const ORM = {
     init(config) {
         const sequelize = new Sequelize(

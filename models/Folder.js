@@ -16,7 +16,6 @@ const Folder = db.define('folder', {
     }
 
 }, {
-    timestamps: false,
     tableName: 'folder'
 });
 
@@ -24,11 +23,5 @@ Folder.belongsTo(Folder, {
     as: 'parent',
     foreignKey: 'parent_id',
 });
-
-const User = require('./User');
-const Team = require('./Team');
-
-Folder.belongsTo(User, { foreignKey: 'user_id', });
-Folder.belongsTo(Team, { foreignKey: 'org_id', });
 
 module.exports = Folder;

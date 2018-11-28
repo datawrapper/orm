@@ -4,7 +4,7 @@ const {db} = require('../index');
 const Team = db.define('team', {
 
     id: {
-        type:SQ.STRING(128),
+        type: SQ.STRING(128),
         primaryKey:true,
     },
 
@@ -13,12 +13,17 @@ const Team = db.define('team', {
     deleted: SQ.BOOLEAN,
     disabled: SQ.BOOLEAN,
 
-    // default_theme:
     settings: SQ.TEXT,
 
 }, {
-    timestamps: false,
-    tableName: 'organization'
+    tableName: 'organization',
+    timestamps: true,
+    createdAt: 'created_at',
+    updatedAt: false,
+    deletedAt: false,
 });
+
+const Theme = require('./Theme');
+Team.belongsTo(Theme, {foreignKey: 'default_theme'});
 
 module.exports = Team;
