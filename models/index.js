@@ -5,6 +5,7 @@ const models = {};
 	'Chart',
 	'ExportJob',
 	'Folder',
+    'Stats',
 	'Team',
 	'Theme',
 	'User',
