@@ -7,26 +7,21 @@ const Folder = db.define('folder', {
         type:SQ.INTEGER,
         primaryKey:true,
         autoIncrement: true,
-        field: 'folder_id'
+        field: 'folder_id' // todo: rename db column
     },
 
     name: {
         type: SQ.STRING,
-        field: 'folder_name'
+        field: 'folder_name' // todo: rename db column
     }
 
 }, {
-    tableName: 'folder'
+    timestamps: false,
+    tableName: 'folder',
 });
 
-Folder.belongsTo(Folder, {
-    as: 'parent',
-    foreignKey: 'parent_id',
-});
+Folder.belongsTo(Folder, { as: 'parent' });
 
-Folder.hasMany(Folder, {
-    as: 'children',
-    foreignKey: 'parent_id'
-});
+Folder.hasMany(Folder, { as: 'children' });
 
 module.exports = Folder;

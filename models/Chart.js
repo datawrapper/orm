@@ -25,8 +25,6 @@ const Chart = db.define('chart', {
     language: SQ.STRING(5),
     external_data: SQ.STRING(),
 }, {
-    timestamps: true,
-    createdAt: 'created_at',
     updatedAt: 'last_modified_at',
     tableName: 'chart'
 });

@@ -9,18 +9,13 @@ const Team = db.define('team', {
     },
 
     name: SQ.STRING,
-    created_at: SQ.DATE,
     deleted: SQ.BOOLEAN,
     disabled: SQ.BOOLEAN,
 
     settings: SQ.TEXT,
 
 }, {
-    tableName: 'organization',
-    timestamps: true,
-    createdAt: 'created_at',
-    updatedAt: false,
-    deletedAt: false,
+    tableName: 'organization'
 });
 
 const Theme = require('./Theme');

@@ -30,15 +30,12 @@ const ExportJob = db.define('export_job', {
     log: SQ.JSON
 }, {
     tableName: 'export_job',
-    timestamps: true,
-    createdAt: 'created_at',
-    updatedAt: false
 });
 
 const User = require('./User');
 const Chart = require('./Chart');
 
-ExportJob.belongsTo(User, {foreignKey: 'user_id'});
-ExportJob.belongsTo(Chart, {foreignKey: 'chart_id'});
+ExportJob.belongsTo(User);
+ExportJob.belongsTo(Chart);
 
 module.exports = ExportJob;

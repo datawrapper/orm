@@ -8,7 +8,6 @@ const Theme = db.define('theme', {
         primaryKey:true,
     },
 
-    created_at: SQ.DATE,
     title: SQ.STRING(128),
 
     data: SQ.TEXT,

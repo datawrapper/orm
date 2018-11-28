@@ -1,7 +1,5 @@
 const Sequelize = require('sequelize');
 
-// Sequelize.options.timestamps = false;
-
 const ORM = {
     init(config) {
         const sequelize = new Sequelize(
@@ -11,7 +9,13 @@ const ORM = {
                 host: config.host,
                 port: config.port,
                 dialect: config.dialect,
-                operatorsAliases: false
+                operatorsAliases: false,
+                logging: process.env.DEV ? console.log : false,
+                define: {
+                    timestamps: true,
+                    updatedAt: false,
+                    underscored: true,
+                }
             },
         );
         ORM.db = sequelize;

@@ -33,10 +33,7 @@ const User = db.define('user', {
     oauth_signin: SQ.STRING,
     customer_id: SQ.STRING
 }, {
-    tableName: 'user',
-    timestamps: true,
-    createdAt: 'created_at',
-    updatedAt: false
+    tableName: 'user'
 });
 
 module.exports = User;
