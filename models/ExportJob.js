@@ -11,12 +11,6 @@ const ExportJob = db.define('export_job', {
     // the larger the priority, the sooner the job will be done
     priority: SQ.INTEGER,
 
-    // the user who created/initiated the job
-    user_id: SQ.INTEGER,
-
-    // the related chart id
-    chart_id: SQ.STRING(5),
-
     // current status of the job
     status: SQ.ENUM('queued', 'in_progress', 'done', 'failed'),
 
@@ -41,5 +35,11 @@ const ExportJob = db.define('export_job', {
     timestamps: false,
     tableName: 'export_job'
 });
+
+const User = require('./User');
+const Chart = require('./Chart');
+
+ExportJob.belongsTo(User, {foreignKey: 'user_id'});
+ExportJob.belongsTo(Chart, {foreignKey: 'chart_id'});
 
 module.exports = ExportJob;
