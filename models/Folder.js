@@ -24,4 +24,9 @@ Folder.belongsTo(Folder, {
     foreignKey: 'parent_id',
 });
 
+Folder.hasMany(Folder, {
+    as: 'children',
+    foreignKey: 'parent_id'
+});
+
 module.exports = Folder;
