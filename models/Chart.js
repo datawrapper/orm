@@ -10,7 +10,7 @@ const Chart = db.define('chart', {
     author_id: SQ.INTEGER,
     guest_session: SQ.STRING,
     organization_id: SQ.STRING(128),
-    folder_id: {type: SQ.INTEGER, field: 'in_folder'},
+    // folder_id: {type: SQ.INTEGER, field: 'in_folder'},
 
     created_at: SQ.DATE,
     last_modified_at: SQ.DATE,
@@ -35,6 +35,8 @@ const Chart = db.define('chart', {
     tableName: 'chart'
 });
 
-Chart.sync();
+const Folder = require('./Folder');
+
+Chart.belongsTo(Folder, {foreignKey: 'in_folder'});
 
 module.exports = Chart;

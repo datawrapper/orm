@@ -42,6 +42,4 @@ const ExportJob = db.define('export_job', {
     tableName: 'export_job'
 });
 
-ExportJob.sync({force:false});
-
 module.exports = ExportJob;
