@@ -7,6 +7,7 @@ const models = {};
 	'Chart',
 	'ExportJob',
 	'Folder',
+	'Plugin',
     'Session',
     'Stats',
 	'Team',
