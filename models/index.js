@@ -14,6 +14,7 @@ const models = {};
 	'Team',
 	'Theme',
 	'User',
+	'UserData',
 	'UserTeam'
 ].forEach(k => {
 	models[k] = require('./'+k);
