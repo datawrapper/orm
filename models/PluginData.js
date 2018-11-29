@@ -23,4 +23,9 @@ const PluginData = db.define('plugin_data', {
     tableName: 'plugin_data',
 });
 
+const Plugin = require('./Plugin');
+
+PluginData.belongsTo(Plugin);
+Plugin.hasMany(PluginData, {as: 'PluginData'});
+
 module.exports = PluginData;

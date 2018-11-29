@@ -22,7 +22,6 @@ const models = {};
 require('./assoc/folder-chart');
 require('./assoc/folder-team');
 require('./assoc/folder-user');
-require('./assoc/plugin-data');
 require('./assoc/user-chart');
 require('./assoc/user-theme');
 
