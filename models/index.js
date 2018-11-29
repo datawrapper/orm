@@ -2,6 +2,7 @@
 const models = {};
 
 [
+	'Action',
 	'Chart',
 	'ExportJob',
 	'Folder',
@@ -15,6 +16,7 @@ const models = {};
 	models[k] = require('./'+k);
 });
 
+require('./assoc/action-user');
 require('./assoc/folder-chart');
 require('./assoc/folder-team');
 require('./assoc/folder-user');
