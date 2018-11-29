@@ -3,12 +3,12 @@ const Sequelize = require('sequelize');
 const ORM = {
     init(config) {
         const sequelize = new Sequelize(
-            config.database,
-            config.user,
-            config.password, {
-                host: config.host,
-                port: config.port,
-                dialect: config.dialect,
+            config.db.database,
+            config.db.user,
+            config.db.password, {
+                host: config.db.host,
+                port: config.db.port,
+                dialect: config.db.dialect,
                 operatorsAliases: false,
                 logging: process.env.DEV ? console.log : false,
                 define: {
@@ -16,9 +16,10 @@ const ORM = {
                     updatedAt: false,
                     underscored: true,
                 }
-            },
+            }
         );
         ORM.db = sequelize;
+        ORM.token_salt = config.secure_auth_salt || '';
     },
     db: {
         define() {

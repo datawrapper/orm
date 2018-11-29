@@ -18,4 +18,7 @@ const Action = db.define('action', {
     tableName: 'action',
 });
 
+const User = require('./User');
+Action.belongsTo(User);
+
 module.exports = Action;
