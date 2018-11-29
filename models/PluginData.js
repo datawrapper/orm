@@ -9,8 +9,6 @@ const PluginData = db.define('plugin_data', {
         autoIncrement: true
     },
 
-    plugin_id: SQ.STRING(128),
-
     key: {
         type: SQ.STRING(128),
         allowNull: false
