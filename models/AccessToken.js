@@ -1,5 +1,5 @@
 const SQ = require('sequelize');
-const {db, token_salt} = require('../index');
+const {db} = require('../index');
 const crypto = require('crypto');
 
 const AccessToken = db.define('access_token', {
@@ -25,7 +25,7 @@ AccessToken.newToken = async function({user_id, type, data}) {
         user_id,
         type,
         data: data || {},
-        token: createRandomToken()
+        token: crypto.randomBytes(64).toString('base64')
     });
 };
 
@@ -36,9 +36,3 @@ AccessToken.sync();
 
 module.exports = AccessToken;
 
-function createRandomToken() {
-    return crypto.createHmac("sha256", token_salt)
-        .update(`${Math.random()*Math.random()}/${new Date()}`)
-        .digest()
-        .toString('base64');
-}
