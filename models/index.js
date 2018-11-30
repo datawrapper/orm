@@ -4,6 +4,7 @@ const models = {};
 [
 	'AccessToken',
 	'Action',
+	'AuthToken',
 	'Chart',
 	'ExportJob',
 	'Folder',
