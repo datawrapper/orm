@@ -10,6 +10,7 @@ const models = {};
 	'Folder',
 	'Plugin',
 	'PluginData',
+	'Product',
     'Session',
     'Stats',
 	'Team',
