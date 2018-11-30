@@ -19,7 +19,17 @@ const User = db.define('user', {
         type: SQ.ENUM('admin', 'editor', 'pending',
             'guest', 'sysadmin', 'graphic-editor'),
         allowNull: false,
-        defaultValue: 'pending'
+        defaultValue: 'pending',
+        get() {
+            const role = this.getDataValue('role');
+            return this.rawAttributes.role.values[role];
+        },
+        set(val) {
+            if (typeof val == 'string') {
+                val = this.rawAttributes.role.values.indexOf(val);
+                if (val > -1) this.setDataValue('role', val);
+            }
+        }
     },
 
     deleted: SQ.BOOLEAN,
