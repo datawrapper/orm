@@ -46,4 +46,13 @@ const User = db.define('user', {
     tableName: 'user'
 });
 
+User.prototype.canEditChart = async function(chart) {
+    // the user is the author!
+    if (this.id == chart.author_id) return true;
+    // the user has admin privilegen
+    if (this.role == 'admin' || this.role == 'sysadmin') return true;
+    // the user is member of a team the chart belongs to
+    return await this.hasTeam(chart.organization_id);
+};
+
 module.exports = User;
