@@ -11,6 +11,7 @@ const models = {};
 	'Plugin',
 	'PluginData',
 	'Product',
+	'ProductPlugin',
     'Session',
     'Stats',
 	'Team',
