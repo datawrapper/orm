@@ -79,6 +79,7 @@ User.prototype.getAllProducts = async function() {
  * @returns true|false
  */
 User.prototype.mayUsePlugin = async function(plugin_id) {
+    const Plugin = require('./Plugin');
     const plugin = await Plugin.findByPk(plugin_id);
     if (!plugin.is_private) return true;
     // look through all the products of this user
