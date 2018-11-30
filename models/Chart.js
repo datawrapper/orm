@@ -32,8 +32,6 @@ const Chart = db.define('chart', {
 const Folder = require('./Folder');
 const Team = require('./Team');
 
-Chart.belongsTo(Team, {foreignKey: 'organization_id'});
-
 Chart.belongsTo(Chart, {
     foreignKey: 'forked_from',
 });
