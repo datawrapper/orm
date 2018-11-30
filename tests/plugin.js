@@ -2,12 +2,17 @@ const ORM = require('../index');
 const config = require('./config');
 ORM.init(config);
 
-const {Plugin} = require('../models');
+const {Plugin, PluginData} = require('../models');
 
 (async () => {
-    const rows = await Plugin.findAll({limit:20});
+    const rows = await Plugin.findAll();
 
-    rows.forEach(row => console.log(row.toJSON()));
+    const plugins = rows.map(p => p.id)
+    console.log(plugins);
+
+    await PluginData.bulkCreate(plugins.map(p => {
+    	return { plugin_id:p, key: 'installed_at', data: 'core' };
+    }))
 
     // const user = await rows[1].getUser();
     // console.log(user.toJSON());
