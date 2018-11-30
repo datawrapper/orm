@@ -5,11 +5,11 @@ ORM.init(config);
 const {AuthToken} = require('../models');
 
 (async () => {
-    const token = await AuthToken.newToken({user_id: 29, comment:'this is another one'});
+    // const token = await AuthToken.newToken({user_id: 29, comment:'this is another one'});
 
-    console.log(token.toJSON());
+    // console.log(token.toJSON());
 
-    const rows = await AuthToken.findAll({limit:20});
+    const rows = await AuthToken.findAll({limit:10});
 
     rows.forEach(row => console.log(row.toJSON()));
 
