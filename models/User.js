@@ -90,4 +90,30 @@ User.prototype.mayUsePlugin = async function(plugin_id) {
     return false;
 };
 
+/*
+ * returns a list of all plugins a user has access to
+ */
+User.prototype.getPlugins = async function() {
+    const Plugin = require('./Plugin');
+    const plugins = await Plugin.findAll();
+    const has_access = [];
+    for (let plugin of plugins) {
+        if (plugin.enabled) {
+            if (!plugin.is_private) {
+                has_access.push(plugin);
+            } else {
+                // check if we gain access through one of the products
+                const products = await this.getAllProducts();
+                for (let product of products) {
+                    if (product.hasPlugin(plugin.id)) {
+                        has_access.push(plugin);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    return has_access;
+}
+
 module.exports = User;

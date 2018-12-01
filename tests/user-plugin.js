@@ -11,6 +11,10 @@ const {User} = require('../models');
 
     console.log(allow);
 
+    const plugins = await user.getPlugins();
+
+    plugins.forEach(d => console.log(d.id));
+
     setTimeout(() => {
     	ORM.db.close();
     }, 200);
