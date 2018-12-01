@@ -3,7 +3,6 @@ const {db} = require('../index');
 const {uniq} = require('underscore');
 
 const User = db.define('user', {
-
     id: {
         type:SQ.INTEGER,
         primaryKey:true,
@@ -85,7 +84,8 @@ User.prototype.mayUsePlugin = async function(plugin_id) {
     // look through all the products of this user
     const products = await this.getAllProducts();
     for (let product of products) {
-        if (product.hasPlugin(plugin_id)) return true;
+        const allow = await product.hasPlugin(plugin_id);
+        if (allow) return true;
     }
     return false;
 };
@@ -105,7 +105,8 @@ User.prototype.getPlugins = async function() {
                 // check if we gain access through one of the products
                 const products = await this.getAllProducts();
                 for (let product of products) {
-                    if (product.hasPlugin(plugin.id)) {
+                    const add = await product.hasPlugin(plugin.id);
+                    if (add) {
                         has_access.push(plugin);
                         break;
                     }

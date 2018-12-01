@@ -9,11 +9,15 @@ const {User} = require('../models');
 
     const allow = await user.mayUsePlugin('export-pdf');
 
-    console.log(allow);
+    console.log('may use?', allow);
 
     const plugins = await user.getPlugins();
 
-    plugins.forEach(d => console.log(d.id));
+    console.log(plugins.map(d => d.id).join(', '));
+
+    // plugins.forEach(p => {
+    // 	console.log(p.id, p.is_private, p.enabled);
+    // })
 
     setTimeout(() => {
     	ORM.db.close();
