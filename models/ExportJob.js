@@ -12,7 +12,10 @@ const ExportJob = db.define('export_job', {
     priority: SQ.INTEGER,
 
     // current status of the job
-    status: SQ.ENUM('queued', 'in_progress', 'done', 'failed'),
+    status: {
+        type: SQ.ENUM('queued', 'in_progress', 'done', 'failed'),
+        defaultValue: 'queued'
+    },
 
     // when was the status changed from queued to in_progress
     processed_at: SQ.DATE,
