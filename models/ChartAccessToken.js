@@ -7,7 +7,7 @@ const alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz
 /*
  * this model is deprecated, we'll switch to AccessToken soons
  */
-const AuthToken = db.define('auth_token', {
+const ChartAccessToken = db.define('chart_access_token', {
 
     id: {
         type:SQ.INTEGER,
@@ -16,24 +16,21 @@ const AuthToken = db.define('auth_token', {
     },
 
     token: SQ.STRING(128),
-    comment: SQ.STRING(255),
-    last_used_at: SQ.DATE,
 
 }, {
-    tableName: 'auth_token',
+    tableName: 'chart_access_token',
 });
 
 // Adding a class level method
-AuthToken.newToken = async function({user_id, type, comment}) {
-    return await AuthToken.create({
-        user_id,
-        comment,
+ChartAccessToken.newToken = async function({chart_id}) {
+    return await ChartAccessToken.create({
+        chart_id,
         token: generate(alphabet, 32)
     });
 };
 
-const User = require('./User');
-AuthToken.belongsTo(User);
+const Chart = require('./Chart');
+ChartAccessToken.belongsTo(Chart);
 
-module.exports = AuthToken;
+module.exports = ChartAccessToken;
 

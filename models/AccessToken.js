@@ -1,6 +1,8 @@
 const SQ = require('sequelize');
 const {db} = require('../index');
-const crypto = require('crypto');
+const generate = require('nanoid/generate');
+
+const alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 
 const AccessToken = db.define('access_token', {
 
@@ -25,7 +27,7 @@ AccessToken.newToken = async function({user_id, type, data}) {
         user_id,
         type,
         data: data || {},
-        token: crypto.randomBytes(64).toString('base64')
+        token: generate(alphabet, 64)
     });
 };
 
