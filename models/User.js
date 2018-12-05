@@ -46,11 +46,26 @@ const User = db.define('user', {
     tableName: 'user'
 });
 
+/*
+ * use user.serialize() whenever user info is about
+ * to get shared publicly, via API etc
+ */
+User.prototype.serialize = function() {
+    const d = this.toJSON();
+    // delete non-safe properties
+    delete d.pwd;
+    delete d.deleted;
+    delete d.created_at;
+    delete d.reset_password_token;
+    delete d.activate_token;
+    return d;
+};
+
 User.prototype.canEditChart = async function(chart) {
     // the user is the author!
-    if (this.id == chart.author_id) return true;
+    if (this.id === chart.author_id) return true;
     // the user has admin privilegen
-    if (this.role == 'admin' || this.role == 'sysadmin') return true;
+    if (this.role === 'admin' || this.role === 'sysadmin') return true;
     // the user is member of a team the chart belongs to
     return await this.hasTeam(chart.organization_id);
 };
