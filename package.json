@@ -1,5 +1,5 @@
 {
-  "name": "datawrapper-orm",
+  "name": "@datawrapper/orm",
   "version": "1.0.0",
   "description": "A database abstraction layer for Datawrapper",
   "main": "index.js",
@@ -10,8 +10,8 @@
     "type": "git",
     "url": "git+https://github.com/datawrapper/datawrapper-orm.git"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Datawrapper GmbH",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/datawrapper/datawrapper-orm/issues"
   },
