@@ -58,6 +58,7 @@ User.prototype.serialize = function() {
     delete d.created_at;
     delete d.reset_password_token;
     delete d.activate_token;
+    delete d.customer_id;
     return d;
 };
 
