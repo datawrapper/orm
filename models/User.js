@@ -61,7 +61,10 @@ User.prototype.serialize = function() {
     return d;
 };
 
-User.prototype.canEditChart = async function(chart) {
+/*
+ * check if the user is allowed to view and edit a chart
+ */
+User.prototype.mayEditChart = async function(chart) {
     // the user is the author!
     if (this.id === chart.author_id) return true;
     // the user has admin privilegen
