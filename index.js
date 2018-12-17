@@ -1,3 +1,5 @@
+/* globals process */
+
 const Sequelize = require('sequelize');
 
 const ORM = {
@@ -10,7 +12,7 @@ const ORM = {
                 port: config.db.port,
                 dialect: config.db.dialect,
                 operatorsAliases: false,
-                logging: process.env.DEV ? console.log : false,
+                logging: process.env.DEV ? (s) => process.stdout.write(s+'\n') : false,
                 define: {
                     timestamps: true,
                     updatedAt: false,

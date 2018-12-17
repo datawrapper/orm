@@ -1,4 +1,3 @@
-const SQ = require('sequelize');
 const {db} = require('../index');
 
 const ProductPlugin = db.define('product_plugin', {

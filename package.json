@@ -17,6 +17,9 @@
   },
   "homepage": "https://github.com/datawrapper/datawrapper-orm#readme",
   "dependencies": {
+    "babel-eslint": "^10.0.1",
+    "eslint": "^5.10.0",
+    "husky": "^1.2.1",
     "mysql2": "^1.6.4",
     "nanoid": "^2.0.0",
     "sequelize": "^4.41.2",

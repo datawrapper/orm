@@ -17,7 +17,6 @@ const Session = db.define('session', {
         get() {
             const d = this.getDataValue('data');
             if (d) {
-                const t = serializeSession(unserializeSession(d));
                 const data = unserializeSession(d);
                 return data;
             }
@@ -381,7 +380,7 @@ function unserializeSession (input) {
         // Other output = $someSerializedStuff$key
         else {
             var repper = part.replace(/(\n|\r)/g," ");
-        var match = repper.match(/^((?:.*?[;\}])+)([^;\}]+?)$/);
+        var match = repper.match(/^((?:.*?[;}])+)([^;}]+?)$/);
             if (match) {
                 output[output._currKey] = php_unserialize(match[1]);
                 output._currKey = match[2];
