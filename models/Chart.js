@@ -34,4 +34,13 @@ Chart.belongsTo(Chart, {
     foreignKey: 'forked_from',
 });
 
+Chart.prototype.isEditableBy = async function(user, session) {
+    if (user) {
+        return await user.mayEditChart(this);
+    } else if (session) {
+        return this.guest_session && this.guest_session === session.id;
+    }
+    return false;
+}
+
 module.exports = Chart;
