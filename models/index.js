@@ -1,29 +1,28 @@
-
 const models = {};
 
 [
-	'AccessToken',
-	'Action',
-	'AuthToken',
-	'Chart',
-	'ChartAccessToken', // deprecated
-	'ExportJob',
-	'Folder',
-	'Plugin',
-	'PluginData',
-	'Product',
-	'ProductPlugin',
+    'AccessToken',
+    'Action',
+    'AuthToken',
+    'Chart',
+    'ChartAccessToken', // deprecated
+    'ExportJob',
+    'Folder',
+    'Plugin',
+    'PluginData',
+    'Product',
+    'ProductPlugin',
     'Session',
     'Stats',
-	'Team',
-	'TeamProduct',
-	'Theme',
-	'User',
-	'UserData',
-	'UserProduct',
-	'UserTeam'
+    'Team',
+    'TeamProduct',
+    'Theme',
+    'User',
+    'UserData',
+    'UserProduct',
+    'UserTeam'
 ].forEach(k => {
-	models[k] = require('./'+k);
+    models[k] = require('./' + k);
 });
 
 require('./assoc/folder-chart');

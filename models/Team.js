@@ -1,24 +1,26 @@
 const SQ = require('sequelize');
-const {db} = require('../index');
+const { db } = require('../index');
 
-const Team = db.define('team', {
+const Team = db.define(
+    'team',
+    {
+        id: {
+            type: SQ.STRING(128),
+            primaryKey: true
+        },
 
-    id: {
-        type: SQ.STRING(128),
-        primaryKey:true,
+        name: SQ.STRING,
+        deleted: SQ.BOOLEAN,
+        disabled: SQ.BOOLEAN,
+
+        settings: SQ.TEXT
     },
-
-    name: SQ.STRING,
-    deleted: SQ.BOOLEAN,
-    disabled: SQ.BOOLEAN,
-
-    settings: SQ.TEXT,
-
-}, {
-    tableName: 'organization'
-});
+    {
+        tableName: 'organization'
+    }
+);
 
 const Theme = require('./Theme');
-Team.belongsTo(Theme, {foreignKey: 'default_theme'});
+Team.belongsTo(Theme, { foreignKey: 'default_theme' });
 
 module.exports = Team;

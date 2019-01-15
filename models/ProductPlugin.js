@@ -1,11 +1,13 @@
-const {db} = require('../index');
+const { db } = require('../index');
 
-const ProductPlugin = db.define('product_plugin', {
-
-}, {
-    tableName: 'product_plugin',
-    timestamps: false
-});
+const ProductPlugin = db.define(
+    'product_plugin',
+    {},
+    {
+        tableName: 'product_plugin',
+        timestamps: false
+    }
+);
 
 const Plugin = require('./Plugin');
 const Product = require('./Product');

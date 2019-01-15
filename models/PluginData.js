@@ -1,29 +1,31 @@
 const SQ = require('sequelize');
-const {db} = require('../index');
+const { db } = require('../index');
 
-const PluginData = db.define('plugin_data', {
+const PluginData = db.define(
+    'plugin_data',
+    {
+        id: {
+            type: SQ.INTEGER,
+            primaryKey: true,
+            autoIncrement: true
+        },
 
-    id: {
-        type:SQ.INTEGER,
-        primaryKey:true,
-        autoIncrement: true
+        key: {
+            type: SQ.STRING(128),
+            allowNull: false
+        },
+
+        data: SQ.STRING(4096)
     },
-
-    key: {
-        type: SQ.STRING(128),
-        allowNull: false
-    },
-
-    data: SQ.STRING(4096)
-
-}, {
-    createdAt: 'stored_at',
-    tableName: 'plugin_data',
-});
+    {
+        createdAt: 'stored_at',
+        tableName: 'plugin_data'
+    }
+);
 
 const Plugin = require('./Plugin');
 
 PluginData.belongsTo(Plugin);
-Plugin.hasMany(PluginData, {as: 'PluginData'});
+Plugin.hasMany(PluginData, { as: 'PluginData' });
 
 module.exports = PluginData;

@@ -1,21 +1,23 @@
 const SQ = require('sequelize');
-const {db} = require('../index');
+const { db } = require('../index');
 
-const TeamProduct = db.define('team_product', {
+const TeamProduct = db.define(
+    'team_product',
+    {
+        created_by_admin: {
+            type: SQ.BOOLEAN,
+            defaultValue: true
+        },
 
-    created_by_admin: {
-        type: SQ.BOOLEAN,
-        defaultValue: true
+        changes: SQ.TEXT,
+
+        expires: SQ.DATE
     },
-
-    changes: SQ.TEXT,
-
-    expires: SQ.DATE
-
-}, {
-    tableName: 'organization_product',
-    timestamps: false
-});
+    {
+        tableName: 'organization_product',
+        timestamps: false
+    }
+);
 
 const Team = require('./Team');
 const Product = require('./Product');
