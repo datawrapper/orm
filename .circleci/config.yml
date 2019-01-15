@@ -1,0 +1,96 @@
+defaults: &defaults
+  working_directory: ~/repo
+  docker:
+    - image: circleci/node:10
+
+cache: &cache
+    key: v1-dependency-cache-{{ checksum "package-lock.json" }}
+
+version: 2
+jobs:
+  install:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore_cache:
+          <<: *cache
+
+      - run: npm ci
+
+      - save_cache:
+          <<: *cache
+          paths:
+            - node_modules
+  test:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore_cache:
+          <<: *cache
+
+      - run:
+          command: |
+            mkdir -p ~/reports/ava
+            npm test -- --tap | npx tap-xunit > ~/reports/ava/results.xml
+      - store_test_results:
+          path: ~/reports
+      - store_artifacts:
+          path: ~/reports
+
+
+  lint:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore_cache:
+          <<: *cache
+
+      - run: npm run lint
+
+  publish:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore_cache:
+          <<: *cache
+
+      - run:
+          name: Authenticate with registry
+          command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
+      - run:
+          name: Publish Package
+          command: npm publish
+
+workflows:
+  version: 2
+  do_what_you_have_to_do:
+    jobs:
+      - install:
+          filters:
+            tags:
+              only: /^v.*/
+
+      - test:
+          filters:
+            tags:
+              only: /^v.*/
+          requires:
+            - install
+
+      - lint:
+          filters:
+            tags:
+              only: /^v.*/
+          requires:
+            - install
+
+      - publish:
+          context: Deployment Keys
+          requires:
+            - test
+            - lint
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/
