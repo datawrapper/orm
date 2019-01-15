@@ -72,7 +72,7 @@ workflows:
               only: /^v.*/
 
       - test:
-          context: org-global
+          context: Testing DB
           filters:
             tags:
               only: /^v.*/
