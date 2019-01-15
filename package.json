@@ -13,8 +13,8 @@
   },
   "scripts": {
     "format": "prettier models/**/*.js --write && eslint models --fix",
-    "lint": "eslint models",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "eslint models tests/*.js",
+    "test": "ava"
   },
   "prettier": {
     "tabWidth": 4,
@@ -51,5 +51,8 @@
     "prettier": "^1.15.3",
     "sequelize": "^4.41.2",
     "underscore": "^1.9.1"
+  },
+  "devDependencies": {
+    "ava": "^1.1.0"
   }
 }
