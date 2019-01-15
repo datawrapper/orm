@@ -30,6 +30,7 @@ jobs:
 
       - run:
           command: |
+            mv tests/config.ci.js tests/config.js
             mkdir -p ~/reports/ava
             npm test -- --tap | npx tap-xunit > ~/reports/ava/results.xml
       - store_test_results:
@@ -63,7 +64,7 @@ jobs:
 
 workflows:
   version: 2
-  do_what_you_have_to_do:
+  install, test and lint:
     jobs:
       - install:
           filters:
@@ -71,6 +72,7 @@ workflows:
               only: /^v.*/
 
       - test:
+          context: org-global
           filters:
             tags:
               only: /^v.*/
@@ -84,13 +86,13 @@ workflows:
           requires:
             - install
 
-      - publish:
-          context: Deployment Keys
-          requires:
-            - test
-            - lint
-          filters:
-            tags:
-              only: /^v.*/
-            branches:
-              ignore: /.*/
+      # - publish:
+      #     context: Deployment Keys
+      #     requires:
+      #       - test
+      #       - lint
+      #     filters:
+      #       tags:
+      #         only: /^v.*/
+      #       branches:
+      #         ignore: /.*/
