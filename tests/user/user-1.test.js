@@ -2,6 +2,11 @@ const test = require('ava');
 const { close, models } = require('../index');
 const { User } = models;
 
+/*
+ * user 1 is an admin who does not have anything
+ * no folders, no charts, no teams, etc
+ */
+
 test.before(async t => {
     t.context = await User.findByPk(1);
 });
