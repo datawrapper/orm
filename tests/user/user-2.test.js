@@ -14,11 +14,10 @@ test('user role property is admin', t => {
     t.is(t.context.role, 'editor');
 });
 
-test('user.getCharts returns empty array', async t => {
-    t.is(typeof t.context.getCharts, 'function', 'user.getCharts() is undefined');
+test('user.getCharts returns single chart', async t => {
     const result = await t.context.getCharts();
-    t.is(result.constructor, Array);
-    t.is(result.length, 2);
+    t.is(result.length, 1);
+    t.is(result[0].title, 'Test chart');
 });
 
 test.after(t => close);
