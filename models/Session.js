@@ -7,7 +7,7 @@ const Session = db.define(
         id: {
             type: SQ.STRING(32),
             primaryKey: true,
-            autoIncrement: true,
+            autoIncrement: false,
             field: 'session_id'
         },
 
