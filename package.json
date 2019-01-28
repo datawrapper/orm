@@ -28,14 +28,11 @@
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/datawrapper/datawrapper-orm.git"
+    "url": "git+https://github.com/datawrapper/orm.git"
   },
   "author": "Datawrapper GmbH",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/datawrapper/datawrapper-orm/issues"
-  },
-  "homepage": "https://github.com/datawrapper/datawrapper-orm#readme",
+  "homepage": "https://github.com/datawrapper/orm#readme",
   "dependencies": {
     "babel-eslint": "^10.0.1",
     "eslint": "^5.12.0",
