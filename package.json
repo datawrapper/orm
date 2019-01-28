@@ -23,7 +23,7 @@
     "singleQuote": true
   },
   "name": "@datawrapper/orm",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "A database abstraction layer for Datawrapper",
   "main": "index.js",
   "repository": {
