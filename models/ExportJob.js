@@ -31,12 +31,39 @@ const ExportJob = db.define(
         tasks: SQ.JSON,
 
         // a log file with debug and error messages from the client
+        // should not be tampered with manually, instead please use
+        // job.logProgress()
         log: SQ.JSON
     },
     {
         tableName: 'export_job'
     }
 );
+
+/**
+ * sets the processed_at timestamp, increments the attempts counter
+ * and initializes the progress array
+ */
+ExportJob.prototype.process = async function () {
+    const log = this.get('log') || {};
+    log.progress = log.progress || [];
+    log.attempts = (log.attempts || 0) + 1;
+    this.set('log', log);
+    this.processed_at = new Date();
+    return this.save();
+};
+
+/**
+ * adds a new progress log entry
+ */
+ExportJob.prototype.logProgress = async function (info) {
+    info.timestamp = new Date();
+    const log = this.get('log') || {};
+    log.progress = log.progress || [];
+    log.progress.push(info);
+    this.set('log', log);
+    return this.save();
+};
 
 const User = require('./User');
 const Chart = require('./Chart');
