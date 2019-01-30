@@ -4,10 +4,11 @@ const Sequelize = require('sequelize');
 
 const ORM = {
     init (config) {
-        const sequelize = new Sequelize(config.db.database, config.db.user, config.db.password, {
-            host: config.db.host,
-            port: config.db.port,
-            dialect: config.db.dialect,
+        const dbConfig = config.orm && config.orm.db ? config.orm.db : config.db;
+        const sequelize = new Sequelize(dbConfig.database, dbConfig.user, dbConfig.password, {
+            host: dbConfig.host,
+            port: dbConfig.port,
+            dialect: dbConfig.dialect,
             operatorsAliases: false,
             logging: process.env.DEV ? s => process.stdout.write(s + '\n') : false,
             define: {
