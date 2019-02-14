@@ -24,7 +24,7 @@ const AccessToken = db.define(
 );
 
 // Adding a class level method
-AccessToken.newToken = async function ({ user_id, type, data }) {
+AccessToken.newToken = async function({ user_id, type, data }) {
     return AccessToken.create({
         user_id,
         type,

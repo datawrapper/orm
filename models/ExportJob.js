@@ -44,7 +44,7 @@ const ExportJob = db.define(
  * sets the processed_at timestamp, increments the attempts counter
  * and initializes the progress array
  */
-ExportJob.prototype.process = async function () {
+ExportJob.prototype.process = async function() {
     const log = this.get('log') || {};
     log.progress = log.progress || [];
     log.attempts = (log.attempts || 0) + 1;
@@ -56,7 +56,7 @@ ExportJob.prototype.process = async function () {
 /**
  * adds a new progress log entry
  */
-ExportJob.prototype.logProgress = async function (info) {
+ExportJob.prototype.logProgress = async function(info) {
     info.timestamp = new Date();
     const log = this.get('log') || {};
     log.progress = log.progress || [];

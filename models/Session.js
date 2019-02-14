@@ -15,7 +15,7 @@ const Session = db.define(
             type: SQ.TEXT,
             allowNull: false,
             field: 'session_data',
-            get () {
+            get() {
                 const d = this.getDataValue('data');
                 if (d) {
                     const data = unserializeSession(d);
@@ -23,7 +23,7 @@ const Session = db.define(
                 }
                 return {};
             },
-            set (data) {
+            set(data) {
                 // WARNING, this will destroy parts of our sessions
                 this.setDataValue('data', serializeSession(data));
             }
@@ -38,7 +38,7 @@ const Session = db.define(
 
 module.exports = Session;
 
-function php_serialize (mixedValue) {
+function php_serialize(mixedValue) {
     //  discuss at: http://locutus.io/php/serialize/
     // original by: Arpad Ray (mailto:arpad@php.net)
     // improved by: Dino
@@ -69,11 +69,11 @@ function php_serialize (mixedValue) {
     var vals = '';
     var count = 0;
 
-    var _utf8Size = function (str) {
+    var _utf8Size = function(str) {
         return ~-encodeURI(str).split(/%..|./).length;
     };
 
-    var _getType = function (inp) {
+    var _getType = function(inp) {
         var match;
         var key;
         var cons;
@@ -107,22 +107,22 @@ function php_serialize (mixedValue) {
     var type = _getType(mixedValue);
 
     switch (type) {
-    case 'function':
-        val = '';
-        break;
-    case 'boolean':
-        val = 'b:' + (mixedValue ? '1' : '0');
-        break;
-    case 'number':
-        val = (Math.round(mixedValue) === mixedValue ? 'i' : 'd') + ':' + mixedValue;
-        break;
-    case 'string':
-        val = 's:' + _utf8Size(mixedValue) + ':"' + mixedValue + '"';
-        break;
-    case 'array':
-    case 'object':
-        val = 'a';
-        /*
+        case 'function':
+            val = '';
+            break;
+        case 'boolean':
+            val = 'b:' + (mixedValue ? '1' : '0');
+            break;
+        case 'number':
+            val = (Math.round(mixedValue) === mixedValue ? 'i' : 'd') + ':' + mixedValue;
+            break;
+        case 'string':
+            val = 's:' + _utf8Size(mixedValue) + ':"' + mixedValue + '"';
+            break;
+        case 'array':
+        case 'object':
+            val = 'a';
+            /*
             if (type === 'object') {
                 var objname = mixedValue.constructor.toString().match(/(\w+)\(\)/);
                 if (objname === undefined) {
@@ -133,27 +133,27 @@ function php_serialize (mixedValue) {
             }
             */
 
-        for (key in mixedValue) {
-            if (mixedValue.hasOwnProperty(key)) {
-                ktype = _getType(mixedValue[key]);
-                if (ktype === 'function') {
-                    continue;
-                }
+            for (key in mixedValue) {
+                if (mixedValue.hasOwnProperty(key)) {
+                    ktype = _getType(mixedValue[key]);
+                    if (ktype === 'function') {
+                        continue;
+                    }
 
-                okey = key.match(/^[0-9]+$/) ? parseInt(key, 10) : key;
-                vals += php_serialize(okey) + php_serialize(mixedValue[key]);
-                count++;
+                    okey = key.match(/^[0-9]+$/) ? parseInt(key, 10) : key;
+                    vals += php_serialize(okey) + php_serialize(mixedValue[key]);
+                    count++;
+                }
             }
-        }
-        val += ':' + count + ':{' + vals + '}';
-        break;
-    case 'undefined':
-    default:
-        // Fall-through
-        // if the JS object has a property which contains a null value,
-        // the string cannot be unserialized by PHP
-        val = 'N';
-        break;
+            val += ':' + count + ':{' + vals + '}';
+            break;
+        case 'undefined':
+        default:
+            // Fall-through
+            // if the JS object has a property which contains a null value,
+            // the string cannot be unserialized by PHP
+            val = 'N';
+            break;
     }
     if (type !== 'object' && type !== 'array') {
         val += ';';
@@ -162,7 +162,7 @@ function php_serialize (mixedValue) {
     return val;
 }
 
-function php_unserialize (data) {
+function php_unserialize(data) {
     //  discuss at: http://locutus.io/php/unserialize/
     // original by: Arpad Ray (mailto:arpad@php.net)
     // improved by: Pedro Tainha (http://www.pedrotainha.com)
@@ -194,7 +194,7 @@ function php_unserialize (data) {
 
     var $global = typeof window !== 'undefined' ? window : global;
 
-    var utf8Overhead = function (str) {
+    var utf8Overhead = function(str) {
         var s = str.length;
         for (var i = str.length - 1; i >= 0; i--) {
             var code = str.charCodeAt(i);
@@ -210,10 +210,10 @@ function php_unserialize (data) {
         }
         return s - 1;
     };
-    var error = function (type, msg, filename, line) {
+    var error = function(type, msg, filename, line) {
         throw new $global[type](msg, filename, line);
     };
-    var readUntil = function (data, offset, stopchr) {
+    var readUntil = function(data, offset, stopchr) {
         var i = 2;
         var buf = [];
         var chr = data.slice(offset, offset + 1);
@@ -228,7 +228,7 @@ function php_unserialize (data) {
         }
         return [buf.length, buf.join('')];
     };
-    var readChrs = function (data, offset, length) {
+    var readChrs = function(data, offset, length) {
         var i, chr, buf;
 
         buf = [];
@@ -239,7 +239,7 @@ function php_unserialize (data) {
         }
         return [buf.length, buf.join('')];
     };
-    function _unserialize (data, offset) {
+    function _unserialize(data, offset) {
         var dtype;
         var dataoffset;
         var keyandchrs;
@@ -259,7 +259,7 @@ function php_unserialize (data) {
         var vchrs;
         var value;
         var chrs = 0;
-        var typeconvert = function (x) {
+        var typeconvert = function(x) {
             return x;
         };
 
@@ -271,92 +271,92 @@ function php_unserialize (data) {
         dataoffset = offset + 2;
 
         switch (dtype) {
-        case 'i':
-            typeconvert = function (x) {
-                return parseInt(x, 10);
-            };
-            readData = readUntil(data, dataoffset, ';');
-            chrs = readData[0];
-            readdata = readData[1];
-            dataoffset += chrs + 1;
-            break;
-        case 'b':
-            typeconvert = function (x) {
-                return parseInt(x, 10) !== 0;
-            };
-            readData = readUntil(data, dataoffset, ';');
-            chrs = readData[0];
-            readdata = readData[1];
-            dataoffset += chrs + 1;
-            break;
-        case 'd':
-            typeconvert = function (x) {
-                return parseFloat(x);
-            };
-            readData = readUntil(data, dataoffset, ';');
-            chrs = readData[0];
-            readdata = readData[1];
-            dataoffset += chrs + 1;
-            break;
-        case 'n':
-            readdata = null;
-            break;
-        case 's':
-            ccount = readUntil(data, dataoffset, ':');
-            chrs = ccount[0];
-            stringlength = ccount[1];
-            dataoffset += chrs + 2;
+            case 'i':
+                typeconvert = function(x) {
+                    return parseInt(x, 10);
+                };
+                readData = readUntil(data, dataoffset, ';');
+                chrs = readData[0];
+                readdata = readData[1];
+                dataoffset += chrs + 1;
+                break;
+            case 'b':
+                typeconvert = function(x) {
+                    return parseInt(x, 10) !== 0;
+                };
+                readData = readUntil(data, dataoffset, ';');
+                chrs = readData[0];
+                readdata = readData[1];
+                dataoffset += chrs + 1;
+                break;
+            case 'd':
+                typeconvert = function(x) {
+                    return parseFloat(x);
+                };
+                readData = readUntil(data, dataoffset, ';');
+                chrs = readData[0];
+                readdata = readData[1];
+                dataoffset += chrs + 1;
+                break;
+            case 'n':
+                readdata = null;
+                break;
+            case 's':
+                ccount = readUntil(data, dataoffset, ':');
+                chrs = ccount[0];
+                stringlength = ccount[1];
+                dataoffset += chrs + 2;
 
-            readData = readChrs(data, dataoffset + 1, parseInt(stringlength, 10));
-            chrs = readData[0];
-            readdata = readData[1];
-            dataoffset += chrs + 2;
-            if (chrs !== parseInt(stringlength, 10) && chrs !== readdata.length) {
-                error('SyntaxError', 'String length mismatch');
-            }
-            break;
-        case 'a':
-            readdata = {};
-
-            keyandchrs = readUntil(data, dataoffset, ':');
-            chrs = keyandchrs[0];
-            keys = keyandchrs[1];
-            dataoffset += chrs + 2;
-
-            length = parseInt(keys, 10);
-            contig = true;
-
-            for (i = 0; i < length; i++) {
-                kprops = _unserialize(data, dataoffset);
-                kchrs = kprops[1];
-                key = kprops[2];
-                dataoffset += kchrs;
-
-                vprops = _unserialize(data, dataoffset);
-                vchrs = vprops[1];
-                value = vprops[2];
-                dataoffset += vchrs;
-
-                if (key !== i) {
-                    contig = false;
+                readData = readChrs(data, dataoffset + 1, parseInt(stringlength, 10));
+                chrs = readData[0];
+                readdata = readData[1];
+                dataoffset += chrs + 2;
+                if (chrs !== parseInt(stringlength, 10) && chrs !== readdata.length) {
+                    error('SyntaxError', 'String length mismatch');
                 }
+                break;
+            case 'a':
+                readdata = {};
 
-                readdata[key] = value;
-            }
+                keyandchrs = readUntil(data, dataoffset, ':');
+                chrs = keyandchrs[0];
+                keys = keyandchrs[1];
+                dataoffset += chrs + 2;
 
-            if (contig) {
-                array = new Array(length);
+                length = parseInt(keys, 10);
+                contig = true;
+
                 for (i = 0; i < length; i++) {
-                    array[i] = readdata[i];
-                }
-                readdata = array;
-            }
+                    kprops = _unserialize(data, dataoffset);
+                    kchrs = kprops[1];
+                    key = kprops[2];
+                    dataoffset += kchrs;
 
-            dataoffset += 1;
-            break;
-        default:
-            // error('SyntaxError', 'Unknown / Unhandled data type(s): ' + dtype)
-            break;
+                    vprops = _unserialize(data, dataoffset);
+                    vchrs = vprops[1];
+                    value = vprops[2];
+                    dataoffset += vchrs;
+
+                    if (key !== i) {
+                        contig = false;
+                    }
+
+                    readdata[key] = value;
+                }
+
+                if (contig) {
+                    array = new Array(length);
+                    for (i = 0; i < length; i++) {
+                        array[i] = readdata[i];
+                    }
+                    readdata = array;
+                }
+
+                dataoffset += 1;
+                break;
+            default:
+                // error('SyntaxError', 'Unknown / Unhandled data type(s): ' + dtype)
+                break;
         }
         return [dtype, dataoffset - offset, typeconvert(readdata)];
     }
@@ -364,9 +364,9 @@ function php_unserialize (data) {
     return _unserialize(data + '', 0)[2];
 }
 
-function unserializeSession (input) {
+function unserializeSession(input) {
     if (!input) return {};
-    return input.split(/\|/).reduce(function (output, part, index, parts) {
+    return input.split(/\|/).reduce(function(output, part, index, parts) {
         // First part = $key
         if (index === 0) {
             output._currKey = part;
@@ -389,7 +389,7 @@ function unserializeSession (input) {
     }, {});
 }
 
-function serializeSession (data) {
+function serializeSession(data) {
     let parts = [];
     Object.keys(data).forEach(k => {
         let s = `${k}|${php_serialize(data[k])}`;

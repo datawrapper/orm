@@ -9,12 +9,12 @@ const UserTeam = db.define(
             type: SQ.ENUM('owner', 'admin', 'member'),
             allowNull: false,
             defaultValue: 'member',
-            get () {
+            get() {
                 const { team_role } = this.get();
                 // const teamRole = this.getDataValue('team_role');
                 return this.rawAttributes.team_role.values[team_role];
             },
-            set (val) {
+            set(val) {
                 if (typeof val == 'string') {
                     val = this.rawAttributes.team_role.values.indexOf(val);
                     if (val > -1) this.setDataValue('team_role', val);

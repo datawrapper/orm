@@ -26,7 +26,7 @@ const AuthToken = db.define(
 );
 
 // Adding a class level method
-AuthToken.newToken = async function ({ user_id, comment }) {
+AuthToken.newToken = async function({ user_id, comment }) {
     return AuthToken.create({
         user_id,
         comment,

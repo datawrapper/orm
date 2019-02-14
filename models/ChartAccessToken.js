@@ -24,7 +24,7 @@ const ChartAccessToken = db.define(
 );
 
 // Adding a class level method
-ChartAccessToken.newToken = async function ({ chart_id }) {
+ChartAccessToken.newToken = async function({ chart_id }) {
     return ChartAccessToken.create({
         chart_id,
         token: generate(alphabet, 32)

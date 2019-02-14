@@ -22,7 +22,7 @@ const Plugin = db.define(
  * use Plugin.register to make sure the apps' plugin show
  * up in the plugin database table
  */
-Plugin.register = async function (app, plugins) {
+Plugin.register = async function(app, plugins) {
     // make sure the plugins are in the plugin list
     await Plugin.bulkCreate(
         plugins.map(p => {

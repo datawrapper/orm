@@ -21,11 +21,11 @@ const User = db.define(
             type: SQ.ENUM('admin', 'editor', 'pending', 'guest', 'sysadmin', 'graphic-editor'),
             allowNull: false,
             defaultValue: 'pending',
-            get () {
+            get() {
                 const role = this.getDataValue('role');
                 return this.rawAttributes.role.values[role];
             },
-            set (val) {
+            set(val) {
                 if (typeof val == 'string') {
                     val = this.rawAttributes.role.values.indexOf(val);
                     if (val > -1) this.setDataValue('role', val);
@@ -53,7 +53,7 @@ const User = db.define(
  * use user.serialize() whenever user info is about
  * to get shared publicly, via API etc
  */
-User.prototype.serialize = function () {
+User.prototype.serialize = function() {
     const d = this.toJSON();
     // delete non-safe properties
     delete d.pwd;
@@ -68,7 +68,7 @@ User.prototype.serialize = function () {
 /*
  * check if the user is allowed to view and edit a chart
  */
-User.prototype.mayEditChart = async function (chart) {
+User.prototype.mayEditChart = async function(chart) {
     // the user is the author!
     if (this.id === chart.author_id) return true;
     // the user has admin privilegen
@@ -81,7 +81,7 @@ User.prototype.mayEditChart = async function (chart) {
  * get list of all products a user has access to
  * through UserProduct or TeamProducts
  */
-User.prototype.getAllProducts = async function () {
+User.prototype.getAllProducts = async function() {
     const products = await this.getProducts();
     const teams = await this.getTeams();
     if (teams.length) {
@@ -99,7 +99,7 @@ User.prototype.getAllProducts = async function () {
  *
  * @returns true|false
  */
-User.prototype.mayUsePlugin = async function (plugin_id) {
+User.prototype.mayUsePlugin = async function(plugin_id) {
     const Plugin = require('./Plugin');
     const plugin = await Plugin.findByPk(plugin_id);
     if (!plugin.is_private) return true;
@@ -115,7 +115,7 @@ User.prototype.mayUsePlugin = async function (plugin_id) {
 /*
  * returns a list of all plugins a user has access to
  */
-User.prototype.getPlugins = async function () {
+User.prototype.getPlugins = async function() {
     const Plugin = require('./Plugin');
     const plugins = await Plugin.findAll();
     const has_access = [];
