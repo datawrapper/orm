@@ -99,14 +99,14 @@ User.prototype.getAllProducts = async function() {
  *
  * @returns true|false
  */
-User.prototype.mayUsePlugin = async function(plugin_id) {
+User.prototype.mayUsePlugin = async function(pluginId) {
     const Plugin = require('./Plugin');
-    const plugin = await Plugin.findByPk(plugin_id);
+    const plugin = await Plugin.findByPk(pluginId);
     if (!plugin.is_private) return true;
     // look through all the products of this user
     const products = await this.getAllProducts();
     for (let product of products) {
-        const allow = await product.hasPlugin(plugin_id);
+        const allow = await product.hasPlugin(pluginId);
         if (allow) return true;
     }
     return false;
@@ -118,26 +118,25 @@ User.prototype.mayUsePlugin = async function(plugin_id) {
 User.prototype.getPlugins = async function() {
     const Plugin = require('./Plugin');
     const plugins = await Plugin.findAll();
-    const has_access = [];
-    const foo = 'bar';
+    const hasAccess = [];
     for (let plugin of plugins) {
         if (plugin.enabled) {
             if (!plugin.is_private) {
-                has_access.push(plugin);
+                hasAccess.push(plugin);
             } else {
                 // check if we gain access through one of the products
                 const products = await this.getAllProducts();
                 for (let product of products) {
                     const add = await product.hasPlugin(plugin.id);
                     if (add) {
-                        has_access.push(plugin);
+                        hasAccess.push(plugin);
                         break;
                     }
                 }
             }
         }
     }
-    return has_access;
+    return hasAccess;
 };
 
 module.exports = User;

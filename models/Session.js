@@ -38,7 +38,7 @@ const Session = db.define(
 
 module.exports = Session;
 
-function php_serialize(mixedValue) {
+function phpSerialize(mixedValue) {
     //  discuss at: http://locutus.io/php/serialize/
     // original by: Arpad Ray (mailto:arpad@php.net)
     // improved by: Dino
@@ -141,7 +141,7 @@ function php_serialize(mixedValue) {
                     }
 
                     okey = key.match(/^[0-9]+$/) ? parseInt(key, 10) : key;
-                    vals += php_serialize(okey) + php_serialize(mixedValue[key]);
+                    vals += phpSerialize(okey) + phpSerialize(mixedValue[key]);
                     count++;
                 }
             }
@@ -162,7 +162,7 @@ function php_serialize(mixedValue) {
     return val;
 }
 
-function php_unserialize(data) {
+function phpUnserialize(data) {
     //  discuss at: http://locutus.io/php/unserialize/
     // original by: Arpad Ray (mailto:arpad@php.net)
     // improved by: Pedro Tainha (http://www.pedrotainha.com)
@@ -372,14 +372,14 @@ function unserializeSession(input) {
             output._currKey = part;
         } else if (index === parts.length - 1) {
             // Last part = $someSerializedStuff
-            output[output._currKey] = php_unserialize(part);
+            output[output._currKey] = phpUnserialize(part);
             delete output._currKey;
         } else {
             // Other output = $someSerializedStuff$key
             var repper = part.replace(/(\n|\r)/g, ' ');
             var match = repper.match(/^((?:.*?[;}])+)([^;}]+?)$/);
             if (match) {
-                output[output._currKey] = php_unserialize(match[1]);
+                output[output._currKey] = phpUnserialize(match[1]);
                 output._currKey = match[2];
             } else {
                 throw new Error('Parse error on part "' + part + '"');
@@ -392,7 +392,7 @@ function unserializeSession(input) {
 function serializeSession(data) {
     let parts = [];
     Object.keys(data).forEach(k => {
-        let s = `${k}|${php_serialize(data[k])}`;
+        let s = `${k}|${phpSerialize(data[k])}`;
         if (s) parts.push(s);
     });
     return parts.join('');
