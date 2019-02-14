@@ -15,7 +15,7 @@ const UserTeam = db.define(
                 return this.rawAttributes.team_role.values[team_role];
             },
             set(val) {
-                if (typeof val == 'string') {
+                if (typeof val === 'string') {
                     val = this.rawAttributes.team_role.values.indexOf(val);
                     if (val > -1) this.setDataValue('team_role', val);
                 }

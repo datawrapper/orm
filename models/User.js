@@ -26,7 +26,7 @@ const User = db.define(
                 return this.rawAttributes.role.values[role];
             },
             set(val) {
-                if (typeof val == 'string') {
+                if (typeof val === 'string') {
                     val = this.rawAttributes.role.values.indexOf(val);
                     if (val > -1) this.setDataValue('role', val);
                 }
@@ -119,6 +119,7 @@ User.prototype.getPlugins = async function() {
     const Plugin = require('./Plugin');
     const plugins = await Plugin.findAll();
     const has_access = [];
+    const foo = 'bar';
     for (let plugin of plugins) {
         if (plugin.enabled) {
             if (!plugin.is_private) {
