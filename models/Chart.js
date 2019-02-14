@@ -23,9 +23,25 @@ const Chart = db.define(
         forkable: SQ.BOOLEAN,
         is_fork: SQ.BOOLEAN,
 
-        metadata: SQ.JSON,
+        metadata: {
+            type: SQ.JSON,
+            get() {
+                const d = this.getDataValue('metadata');
+                if (d) {
+                    return JSON.parse(d);
+                }
+                return {};
+            },
+            set(data) {
+                // WARNING, this will destroy parts of our sessions
+                if (!data) data = {};
+                this.setDataValue('data', JSON.stringify(data));
+            }
+        },
         language: SQ.STRING(5),
-        external_data: SQ.STRING()
+        external_data: SQ.STRING(),
+
+        utf8: SQ.BOOLEAN
     },
     {
         updatedAt: 'last_modified_at',
@@ -37,7 +53,7 @@ Chart.belongsTo(Chart, {
     foreignKey: 'forked_from'
 });
 
-Chart.prototype.isEditableBy = async function (user, session) {
+Chart.prototype.isEditableBy = async function(user, session) {
     if (user) {
         return user.mayEditChart(this);
     } else if (session) {
