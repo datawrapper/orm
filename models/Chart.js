@@ -24,19 +24,7 @@ const Chart = db.define(
         is_fork: SQ.BOOLEAN,
 
         metadata: {
-            type: SQ.JSON,
-            get() {
-                const d = this.getDataValue('metadata');
-                if (d) {
-                    return JSON.parse(d);
-                }
-                return {};
-            },
-            set(data) {
-                // WARNING, this will destroy parts of our sessions
-                if (!data) data = {};
-                this.setDataValue('data', JSON.stringify(data));
-            }
+            type: SQ.JSON
         },
         language: SQ.STRING(5),
         external_data: SQ.STRING(),
