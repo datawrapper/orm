@@ -15,7 +15,7 @@
         "format": "prettier 'src/**/*.js' --write",
         "lint": "prettier --check 'src/**/*.{js,html}' && healthier 'src/**/*.{js,html}'",
         "test": "ava",
-        "prepublish": "test"
+        "prepublish": "ava"
     },
     "repository": {
         "type": "git",
