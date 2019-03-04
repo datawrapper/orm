@@ -33,7 +33,6 @@ const Chart = db.define(
                 return {};
             },
             set(data) {
-                // WARNING, this will destroy parts of our sessions
                 if (!data) data = {};
                 this.setDataValue('data', JSON.stringify(data));
             }
