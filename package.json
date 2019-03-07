@@ -12,8 +12,8 @@
     ],
     "main": "index.js",
     "scripts": {
-        "format": "prettier 'src/**/*.js' --write",
-        "lint": "prettier --check 'src/**/*.{js,html}' && healthier 'src/**/*.{js,html}'",
+        "format": "prettier 'models/**/*.js' --write",
+        "lint": "prettier --check 'models/**/*.{js,html}' && healthier 'models/**/*.{js,html}'",
         "test": "ava"
     },
     "repository": {
