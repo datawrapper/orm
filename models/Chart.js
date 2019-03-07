@@ -23,20 +23,7 @@ const Chart = db.define(
         forkable: SQ.BOOLEAN,
         is_fork: SQ.BOOLEAN,
 
-        metadata: {
-            type: SQ.JSON,
-            get() {
-                const d = this.getDataValue('metadata');
-                if (d) {
-                    return JSON.parse(d);
-                }
-                return {};
-            },
-            set(data) {
-                if (!data) data = {};
-                this.setDataValue('data', JSON.stringify(data));
-            }
-        },
+        metadata: SQ.JSON,
         language: SQ.STRING(5),
         external_data: SQ.STRING(),
 
