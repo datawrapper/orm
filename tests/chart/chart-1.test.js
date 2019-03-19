@@ -1,8 +1,9 @@
 const test = require('ava');
-const { close, models } = require('../index');
-const { Chart } = models;
+const { close, init } = require('../index');
 
 test.before(async t => {
+    await init();
+    const { Chart } = require('../../models');
     t.context = await Chart.findByPk('aaaaa');
 });
 

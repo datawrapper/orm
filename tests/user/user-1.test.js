@@ -1,6 +1,5 @@
 const test = require('ava');
-const { close, models } = require('../index');
-const { User } = models;
+const { close, init } = require('../index');
 
 /*
  * user 1 is an admin who does not have anything
@@ -8,6 +7,8 @@ const { User } = models;
  */
 
 test.before(async t => {
+    await init();
+    const { User } = require('../../models');
     t.context = await User.findByPk(1);
 });
 

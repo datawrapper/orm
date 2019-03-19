@@ -1,6 +1,5 @@
 const test = require('ava');
-const { close, models } = require('../index');
-const { ExportJob } = models;
+const { close, init } = require('../index');
 
 /**
  * test creates a new dummy ExportJob instance and tests the job.process()
@@ -8,6 +7,8 @@ const { ExportJob } = models;
  */
 
 test.before(async t => {
+    await init();
+    const { ExportJob } = require('../../models');
     // create new test job
     t.context = await ExportJob.create({
         key: 'test-task',

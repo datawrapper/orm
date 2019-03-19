@@ -1,15 +1,15 @@
 const ORM = require('../index');
 const config = require('./config');
 
-ORM.init(config);
-
-const models = require('../models/index');
-
-module.exports = {
-    close () {
+const test = {
+    init() {
+        return ORM.init(config);
+    },
+    close() {
         setTimeout(() => {
             ORM.db.close();
         }, 100);
-    },
-    models
+    }
 };
+
+module.exports = test;

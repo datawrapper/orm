@@ -1,12 +1,13 @@
 const test = require('ava');
-const { close, models } = require('../index');
-const { User, Team } = models;
+const { close, init } = require('../index');
 
 /*
  * user 2 is an editor who has one chart
  */
 
 test.before(async t => {
+    await init();
+    const { User, Team } = require('../../models');
     t.context = await User.findByPk(2, {
         include: [
             {

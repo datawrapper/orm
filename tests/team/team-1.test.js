@@ -1,12 +1,13 @@
 const test = require('ava');
-const { close, models } = require('../index');
-const { Team } = models;
+const { close, init } = require('../index');
 
 /*
  * user 2 is an editor who has one chart
  */
 
 test.before(async t => {
+    await init();
+    const { Team } = require('../../models');
     t.context = await Team.findByPk('team-1');
 });
 
