@@ -27,7 +27,7 @@ Plugin.register = async function(app, plugins) {
     await Plugin.bulkCreate(
         plugins.map(p => {
             return {
-                id: p,
+                id: p.replace('@datawrapper/plugin-', ''),
                 enabled: true,
                 is_private: false
             };
