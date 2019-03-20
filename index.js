@@ -33,7 +33,7 @@ const ORM = {
                 );
 
                 sequelize
-                    .query('select 1')
+                    .query('select id from chart limit 1')
                     .then(() => {
                         ORM.db = sequelize;
                         ORM.token_salt = config.secure_auth_salt || '';
