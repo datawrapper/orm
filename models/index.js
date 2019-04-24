@@ -5,6 +5,7 @@ const models = {};
     'Action',
     'AuthToken',
     'Chart',
+    'ChartPublic',
     'ChartAccessToken', // deprecated
     'ExportJob',
     'Folder',
