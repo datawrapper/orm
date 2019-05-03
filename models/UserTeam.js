@@ -39,10 +39,7 @@ const Team = require('./Team');
 
 User.belongsToMany(Team, {
     through: {
-        model: UserTeam,
-        scope: {
-            team_role: 0
-        }
+        model: UserTeam
     },
     foreignKey: 'user_id',
     timestamps: false
