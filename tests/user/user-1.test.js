@@ -13,7 +13,7 @@ test.before(async t => {
 });
 
 test('get user 1', t => {
-    t.is(t.context.email, 'ci@datawrapper.de');
+    t.is(t.context.email, 'ci1@datawrapper.de');
 });
 
 test('user role property is admin', t => {
