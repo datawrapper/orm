@@ -10,7 +10,6 @@ test.before(async t => {
             {
                 model: Chart,
                 required: false,
-                where: { author_id: db.col('user.id') },
                 attributes: ['id']
             }
         ],
