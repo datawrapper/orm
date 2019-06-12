@@ -1,8 +1,5 @@
 const test = require('ava');
 const { close, init } = require('../index');
-/*
- * user 2 is an editor who has one chart
- */
 
 test.before(async t => {
     await init();
@@ -24,7 +21,7 @@ test.before(async t => {
     });
 });
 
-test('found one user with a single chart', t => {
+test('found three users, sorted by chart count', t => {
     // 3 users in total
     t.is(t.context.length, 3);
     // first has two charts
