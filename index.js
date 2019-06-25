@@ -22,7 +22,6 @@ const ORM = {
                         host: dbConfig.host,
                         port: dbConfig.port,
                         dialect: dbConfig.dialect,
-                        operatorsAliases: false,
                         logging: process.env.DEV ? s => process.stdout.write(s + '\n') : false,
                         define: {
                             timestamps: true,

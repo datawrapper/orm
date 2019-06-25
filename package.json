@@ -23,7 +23,7 @@
     "dependencies": {
         "mysql2": "^1.6.4",
         "nanoid": "^2.0.0",
-        "sequelize": "^4.41.2",
+        "sequelize": "6.0.0",
         "underscore": "^1.9.1"
     },
     "devDependencies": {
