@@ -35,6 +35,7 @@ const ORM = {
                     .query('select id from chart limit 1')
                     .then(() => {
                         ORM.db = sequelize;
+                        ORM.db.Op = Sequelize.Op;
                         ORM.token_salt = config.secure_auth_salt || '';
                         resolve();
                     })
