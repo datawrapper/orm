@@ -15,7 +15,7 @@ const AuthToken = db.define(
             primaryKey: true,
             autoIncrement: true
         },
-
+        user_id: SQ.INTEGER,
         token: SQ.STRING(128),
         comment: SQ.STRING(255),
         last_used_at: SQ.DATE
