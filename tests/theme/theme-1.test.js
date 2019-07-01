@@ -47,8 +47,11 @@ test('theme.getFlatThemeData', async t => {
     t.is(typeof t.context.getFlatThemeData, 'function', 'theme.getFlatThemeData() is undefined');
     const data = await t.context.getFlatThemeData();
     t.is(typeof data, 'object');
+    // check a property coming from the theme itself
     t.is(data.colors.general.background, '#f9f9f9');
+    // check a property coming from parent theme "datawrapper"
     t.is(data.colors.general.padding, 0);
+    // check a property coming from grand-parents theme "default"
     t.is(data.easing, 'easeInOut');
 });
 
