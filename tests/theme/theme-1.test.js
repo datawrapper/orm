@@ -43,4 +43,13 @@ test('set theme.data', async t => {
     t.is(theme.data.typography.chart.fontSize, 13);
 });
 
+test('theme.getFlatThemeData', async t => {
+    t.is(typeof t.context.getFlatThemeData, 'function', 'theme.getFlatThemeData() is undefined');
+    const data = await t.context.getFlatThemeData();
+    t.is(typeof data, 'object');
+    t.is(data.colors.general.background, '#f9f9f9');
+    t.is(data.colors.general.padding, 0);
+    t.is(data.easing, 'easeInOut');
+});
+
 test.after(t => close);
