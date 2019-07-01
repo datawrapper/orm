@@ -59,4 +59,13 @@ test('theme.getMergedData', async t => {
     t.is(data.easing, 'easeInOut');
 });
 
+test('theme.getMergedAssets', async t => {
+    t.is(typeof t.context.getMergedAssets, 'function', 'theme.getMergedAssets() is undefined');
+    const assets = await t.context.getMergedAssets();
+    t.is(typeof assets, 'object');
+    // check a property coming from the theme itself
+    t.truthy(assets.Roboto);
+    t.truthy(assets.Helvetica);
+});
+
 test.after(t => close);

@@ -63,4 +63,22 @@ Theme.prototype.getMergedData = async function() {
     return merged;
 };
 
+/*
+ * retreive "merged" theme assets, which is the theme assets
+ * with all assets of "extended" themes merged into it.
+ */
+Theme.prototype.getMergedAssets = async function() {
+    let theme = this;
+    const assets = [theme.get('assets')];
+    while (theme.get('extend')) {
+        theme = await Theme.findByPk(theme.get('extend'));
+        if (theme.get('assets')) assets.push(theme.get('assets'));
+    }
+    let merged = {};
+    while (assets.length) {
+        merged = assign(merged, assets.pop());
+    }
+    return merged;
+};
+
 module.exports = Theme;
