@@ -46,21 +46,21 @@ const Theme = db.define(
 Theme.belongsTo(Theme, { foreignKey: 'extend' });
 
 /*
- * retreive "flattened" theme data, which is the theme data
+ * retreive "merged" theme data, which is the theme data
  * with all data of "extended" themes merged into it.
  */
-Theme.prototype.getFlatThemeData = async function() {
+Theme.prototype.getMergedData = async function() {
     let theme = this;
     const data = [theme.get('data')];
     while (theme.get('extend')) {
         theme = await Theme.findByPk(theme.get('extend'));
         data.push(theme.get('data'));
     }
-    let flat = {};
+    let merged = {};
     while (data.length) {
-        flat = assign(flat, data.pop());
+        merged = assign(merged, data.pop());
     }
-    return flat;
+    return merged;
 };
 
 module.exports = Theme;

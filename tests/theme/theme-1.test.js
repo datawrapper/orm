@@ -47,9 +47,9 @@ test('set theme.data', async t => {
     t.is(theme.data.typography.chart.fontSize, 13);
 });
 
-test('theme.getFlatThemeData', async t => {
-    t.is(typeof t.context.getFlatThemeData, 'function', 'theme.getFlatThemeData() is undefined');
-    const data = await t.context.getFlatThemeData();
+test('theme.getMergedData', async t => {
+    t.is(typeof t.context.getMergedData, 'function', 'theme.getMergedData() is undefined');
+    const data = await t.context.getMergedData();
     t.is(typeof data, 'object');
     // check a property coming from the theme itself
     t.is(data.colors.general.background, '#f9f9f9');
