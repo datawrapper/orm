@@ -1,10 +1,6 @@
 const test = require('ava');
 const { close, init } = require('../index');
 
-/*
- * user 2 is an editor who has one chart
- */
-
 test.before(async t => {
     await init();
     const { Theme } = require('../../models');
@@ -15,6 +11,14 @@ test('get theme.data', t => {
     const data = t.context.data;
     t.is(typeof data, 'object');
     t.is(data.colors.general.background, '#f9f9f9');
+});
+
+test('get theme.assets', async t => {
+    const { Theme } = require('../../models');
+    const theme = await Theme.findByPk('datawrapper');
+    t.is(typeof theme.assets, 'object');
+    t.truthy(theme.assets.Roboto);
+    t.falsy(theme.assets.Helvetica);
 });
 
 test('set theme.data', async t => {
