@@ -33,7 +33,11 @@ const ExportJob = db.define(
         // a log file with debug and error messages from the client
         // should not be tampered with manually, instead please use
         // job.logProgress()
-        log: SQ.JSON
+        log: SQ.JSON,
+
+        user_id: SQ.INTEGER,
+
+        chart_id: SQ.STRING(5)
     },
     {
         tableName: 'export_job'
