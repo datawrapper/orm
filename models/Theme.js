@@ -76,7 +76,7 @@ Theme.prototype.getMergedAssets = async function() {
     }
     let merged = {};
     while (assets.length) {
-        merged = assign(merged, assets.pop());
+        merged = Object.assign(merged, assets.pop());
     }
     return merged;
 };

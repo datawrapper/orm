@@ -31,7 +31,7 @@ module.exports.getAllMergedThemes = async function() {
         }
         let mergedAssets = {};
         while (assets.length) {
-            mergedAssets = assign(mergedAssets, assets.pop());
+            mergedAssets = Object.assign(mergedAssets, assets.pop());
         }
         theme = themes[i].toJSON();
         theme.data = mergedData;
