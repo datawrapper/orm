@@ -7,6 +7,7 @@
     "author": "Datawrapper GmbH",
     "files": [
         "models",
+        "utils",
         "index.js",
         "sync.js"
     ],
