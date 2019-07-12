@@ -18,7 +18,7 @@ test('log a new action', async t => {
     res = await logAction(user, 'orm-test/run', 123);
     t.is(res.details, 123);
 
-    res = await logAction(user, 'orm-test/run', 'a string');
+    res = await logAction(2, 'orm-test/run', 'a string');
     t.is(res.details, 'a string');
 
     res = await logAction(user, 'orm-test/run', true);
