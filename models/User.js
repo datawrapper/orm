@@ -78,6 +78,26 @@ User.prototype.mayEditChart = async function(chart) {
 };
 
 /*
+ * check if the user is allowed to administrate a team
+ */
+User.mayAdministrateTeam = async function(teamId) {
+    const UserTeam = require('./UserTeam');
+    if (this.role === 'admin' || this.role === 'sysadmin') return true;
+
+    const team = await UserTeam.findOne({
+        where: {
+            user_id: this.id,
+            organization_id: teamId
+        }
+    });
+
+    if (!team) return false;
+    if (team.dataValues.team_role === 2) return false;
+
+    return true;
+};
+
+/*
  * get list of all products a user has access to
  * through UserProduct or TeamProducts
  */
