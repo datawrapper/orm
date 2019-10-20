@@ -17,6 +17,7 @@ const models = {};
     'Stats',
     'Team',
     'TeamProduct',
+    'TeamTheme',
     'Theme',
     'User',
     'UserData',
