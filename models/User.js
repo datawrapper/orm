@@ -80,7 +80,7 @@ User.prototype.mayEditChart = async function(chart) {
 /*
  * check if the user is allowed to administrate a team
  */
-User.mayAdministrateTeam = async function(teamId) {
+User.prototype.mayAdministrateTeam = async function(teamId) {
     const UserTeam = require('./UserTeam');
     if (this.role === 'admin' || this.role === 'sysadmin') return true;
 
