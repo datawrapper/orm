@@ -20,13 +20,10 @@ const Team = db.define(
     }
 );
 
-const Theme = require('./Theme');
-const UserTeam = require('./UserTeam');
-const UserPluginCache = require('./UserPluginCache');
-
-Team.belongsTo(Theme, { foreignKey: 'default_theme' });
-
 Team.prototype.invalidatePluginCache = async function() {
+    const UserTeam = require('./UserTeam');
+    const UserPluginCache = require('./UserPluginCache');
+
     const userTeams = await UserTeam.findAll({
         where: {
             organization_id: this.id
@@ -45,5 +42,8 @@ Team.prototype.invalidatePluginCache = async function() {
         where: userQuery
     });
 };
+
+const Theme = require('./Theme');
+Team.belongsTo(Theme, { foreignKey: 'default_theme' });
 
 module.exports = Team;
