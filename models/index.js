@@ -21,6 +21,7 @@ const models = {};
     'Theme',
     'User',
     'UserData',
+    'UserPluginCache',
     'UserProduct',
     'UserTeam'
 ].forEach(k => {
