@@ -105,7 +105,7 @@ User.prototype.getAllProducts = async function() {
     const products = await this.getProducts();
     const teams = await this.getTeams();
     if (teams.length) {
-        for (let team of teams) {
+        for (const team of teams) {
             const TeamProducts = await team.getProducts();
             products.push.apply(products, TeamProducts);
         }
@@ -125,7 +125,7 @@ User.prototype.mayUsePlugin = async function(pluginId) {
     if (!plugin.is_private) return true;
     // look through all the products of this user
     const products = await this.getAllProducts();
-    for (let product of products) {
+    for (const product of products) {
         const allow = await product.hasPlugin(pluginId);
         if (allow) return true;
     }
@@ -139,14 +139,14 @@ User.prototype.getPlugins = async function() {
     const Plugin = require('./Plugin');
     const plugins = await Plugin.findAll();
     const hasAccess = [];
-    for (let plugin of plugins) {
+    for (const plugin of plugins) {
         if (plugin.enabled) {
             if (!plugin.is_private) {
                 hasAccess.push(plugin);
             } else {
                 // check if we gain access through one of the products
                 const products = await this.getAllProducts();
-                for (let product of products) {
+                for (const product of products) {
                     const add = await product.hasPlugin(plugin.id);
                     if (add) {
                         hasAccess.push(plugin);

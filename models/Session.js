@@ -134,7 +134,8 @@ function phpSerialize(mixedValue) {
             */
 
             for (key in mixedValue) {
-                if (mixedValue.hasOwnProperty(key)) {
+                /* https://eslint.org/docs/rules/no-prototype-builtins */
+                if (Object.prototype.hasOwnProperty.call(hasOwnProperty, key)) {
                     ktype = _getType(mixedValue[key]);
                     if (ktype === 'function') {
                         continue;
@@ -390,9 +391,9 @@ function unserializeSession(input) {
 }
 
 function serializeSession(data) {
-    let parts = [];
+    const parts = [];
     Object.keys(data).forEach(k => {
-        let s = `${k}|${phpSerialize(data[k])}`;
+        const s = `${k}|${phpSerialize(data[k])}`;
         if (s) parts.push(s);
     });
     return parts.join('');

@@ -30,9 +30,9 @@ Team.prototype.invalidatePluginCache = async function() {
         }
     });
 
-    let userQuery = { [SQ.Op.or]: [] };
+    const userQuery = { [SQ.Op.or]: [] };
 
-    for (let userTeam of userTeams) {
+    for (const userTeam of userTeams) {
         userQuery[SQ.Op.or].push({
             user_id: userTeam.user_id
         });
