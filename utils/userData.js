@@ -10,10 +10,9 @@ const UserData = require('../models/UserData');
  */
 module.exports.getUserData = async function(userId, key, _default = undefined) {
     const row = await UserData.findOne({
-        user_id: userId,
-        key
+        where: { user_id: userId, key }
     });
-    return row ? row.value : _default;
+    return row ? row.data : _default;
 };
 
 /**
