@@ -27,3 +27,18 @@ module.exports.setUserData = async function(userId, key, value) {
         { replacements: { userId, key, value } }
     );
 };
+
+/**
+ * a quick way to remove user setting in user_data
+ * @param {number} userId
+ * @param {string} key
+ */
+module.exports.unsetUserData = async function(userId, key) {
+    if (!key) return;
+    return UserData.destroy({
+        where: {
+            user_id: userId,
+            key
+        }
+    });
+};
