@@ -1,4 +1,12 @@
+const path = require('path');
 module.exports = {
+    general: {
+        localPluginRoot: path.resolve(path.join(process.cwd(), 'plugins'))
+    },
+    plugins: {
+        'orm-test': {},
+        lul: {}
+    },
     orm: {
         db: {
             dialect: 'mysql',

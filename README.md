@@ -35,3 +35,49 @@ Note that this will initialize the entire model, which assumes that your databas
 ```js
 const User = require('@datawrapper/orm/models/User');
 ```
+
+### Plugins
+
+The ORMs functionality can be extended with plugins. This is needed, for example, when new database tables are needed. The plugin API follows the convention of plugins in [datawrapper/api](https://github.com/datawrapper/api#plugins).
+
+A simple ORM plugin that does nothing looks like this:
+
+```js
+/* config.js */
+plugins: {
+    'my-orm-plugin': {
+        my_name: 'Steve'
+    }
+}
+
+/* orm.js */
+module.exports = {
+    register: async (ORM, config) => {
+        console.log(`Hi I am ${config.my_name}!`)
+        // logs "Hi I am Steve!" on registration
+    }
+}
+```
+
+There are 2 interesting properties on the `ORM` object that help with plugin access.
+
+* `ORM.plugins` is an object with all configured plugins. They are **not** registered by default. Since standard `Models` are not defined after `ORM.init()` either, it wouldn't make sense to do that for plugins.
+
+This is how you register a plugin:
+
+```js
+await ORM.init()
+const { plugins } = ORM
+
+const MyORMPlugin = require(plugins['my-orm-plugin'].requirePath)
+await MyORMPlugin.register(ORM, plugins['my-orm-plugin'])
+```
+
+This method is very useful for tests where you only need a special plugin. There is also a helper method to register all plugins. It is in functionality similar to requiring all models with `require('@datawrapper/orm/models')`.
+
+* `ORM.registerPlugins` will register all plugins.
+
+```js
+await ORM.init()
+await ORM.registerPlugins()
+```
