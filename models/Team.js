@@ -13,7 +13,7 @@ const Team = db.define(
         deleted: SQ.BOOLEAN,
         disabled: SQ.BOOLEAN,
 
-        settings: SQ.TEXT
+        settings: SQ.JSON
     },
     {
         tableName: 'organization'
