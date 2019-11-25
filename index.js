@@ -46,7 +46,7 @@ const ORM = {
                 if (err.name.substr(0, 9) === 'Sequelize' && config.orm && config.orm.retry) {
                     console.warn(err.message);
                     console.warn(
-                        `database is not ready, yet. retrying in ${retryInterval} seconds...`
+                        `database is not ready, yet. retrying in ${retryInterval / 1000} seconds...`
                     );
                     if (!config.orm.retryLimit || retries < config.orm.retryLimit) {
                         retries++;
