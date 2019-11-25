@@ -8,6 +8,8 @@ let retries = 0;
 const ORM = {
     async init(config) {
         const dbConfig = config.orm && config.orm.db ? config.orm.db : config.db;
+        const retryInterval = config.orm.retryInterval ? config.orm.retryInterval * 1000 : 3000;
+
         let configuredPlugins = {};
 
         if (config.general && config.general.localPluginRoot && config.plugins) {
@@ -43,10 +45,12 @@ const ORM = {
             } catch (err) {
                 if (err.name.substr(0, 9) === 'Sequelize' && config.orm && config.orm.retry) {
                     console.warn(err.message);
-                    console.warn('database is not ready, yet. retrying in 3 seconds...');
-                    if (retries < 4) {
+                    console.warn(
+                        `database is not ready, yet. retrying in ${retryInterval / 1000} seconds...`
+                    );
+                    if (!config.orm.retryLimit || retries < config.orm.retryLimit) {
                         retries++;
-                        await wait(connect, 3000);
+                        await wait(connect, retryInterval);
                     } else {
                         throw err;
                     }
