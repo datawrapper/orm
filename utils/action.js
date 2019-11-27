@@ -3,19 +3,17 @@ const Action = require('../models/Action');
 /**
  * helper for logging a user action to the `action` table
  *
- * @param {object|integer} user - user_id or User instance object
+ * @param {integer} userId - user id
  * @param {string} key - the action key
  * @param {*} details - action details
  */
-module.exports.logAction = async function(user, key, details) {
-    const action = await Action.create({
+module.exports.logAction = async function(userId, key, details) {
+    return Action.create({
         key: key,
+        user_id: userId,
         details:
             typeof details !== 'number' && typeof details !== 'string'
                 ? JSON.stringify(details)
                 : details
     });
-    action.setUser(user);
-    await action.save();
-    return action;
 };
