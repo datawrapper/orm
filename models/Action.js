@@ -21,6 +21,6 @@ const Action = db.define(
 );
 
 const User = require('./User');
-Action.belongsTo(User);
+Action.belongsTo(User, { foreignKey: 'user_id' });
 
 module.exports = Action;
