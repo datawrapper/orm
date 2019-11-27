@@ -27,11 +27,11 @@ test('log a new action', async t => {
     res = await logAction(user.id, 'orm-test/run', { foo: 'bar' });
     t.is(res.details, '{"foo":"bar"}');
 
-    // await Action.destroy({
-    //     where: {
-    //         key: 'orm-test/run'
-    //     }
-    // });
+    await Action.destroy({
+        where: {
+            key: 'orm-test/run'
+        }
+    });
 });
 
 test.after(t => close);
