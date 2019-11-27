@@ -15,5 +15,7 @@ module.exports.logAction = async function(user, key, details) {
                 ? JSON.stringify(details)
                 : details
     });
-    return action.setUser(user);
+    action.setUser(user);
+    await action.save();
+    return action;
 };
