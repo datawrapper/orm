@@ -30,7 +30,7 @@ const UserTeam = db.define(
     },
     {
         tableName: 'user_organization',
-        timestamps: false
+        createdAt: 'invited_at'
     }
 );
 
@@ -52,5 +52,7 @@ Team.belongsToMany(User, {
     foreignKey: 'organization_id',
     timestamps: false
 });
+
+UserTeam.belongsTo(User, { foreignKey: 'invited_by' });
 
 module.exports = UserTeam;
