@@ -66,6 +66,13 @@ User.prototype.serialize = function() {
 };
 
 /*
+ * check if the user is a Datawrapper admin
+ */
+User.prototype.isAdmin = function() {
+    return this.role === 'admin' || this.role === 'sysadmin';
+};
+
+/*
  * check if the user is allowed to view and edit a chart
  */
 User.prototype.mayEditChart = async function(chart) {
