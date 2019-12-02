@@ -10,9 +10,6 @@ const Team = db.define(
         },
 
         name: SQ.STRING,
-        deleted: SQ.BOOLEAN,
-        disabled: SQ.BOOLEAN,
-
         settings: SQ.JSON
     },
     {
