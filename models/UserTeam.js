@@ -10,9 +10,8 @@ const UserTeam = db.define(
             allowNull: false,
             defaultValue: 'member',
             get() {
-                const { team_role } = this.get();
-                // const teamRole = this.getDataValue('team_role');
-                return this.rawAttributes.team_role.values[team_role];
+                const teamRole = this.getDataValue('team_role');
+                return this.rawAttributes.team_role.values[teamRole];
             },
             set(val) {
                 if (typeof val === 'string') {
