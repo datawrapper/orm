@@ -34,4 +34,24 @@ test('log a new action', async t => {
     });
 });
 
+test('check if action was actually stored', async t => {
+    const { logAction, Action, user } = t.context;
+
+    const random = `xyz-${Math.random()}`;
+    await logAction(user.id, 'orm-test/another', random);
+    // load action from db
+    const action = await Action.findOne({
+        where: {
+            key: 'orm-test/another',
+            details: random
+        }
+    });
+    t.truthy(action);
+
+    await action.destroy();
+    // out of curiosity, check if we can access properties
+    // after action has been destroyed
+    t.is(action.details, random);
+});
+
 test.after(t => close);
