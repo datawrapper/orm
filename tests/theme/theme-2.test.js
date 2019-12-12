@@ -16,6 +16,8 @@ test('get theme.data', t => {
     t.is(theme.data.colors.general.background, '#f9f9f9');
     // check a property coming from parent theme "datawrapper"
     t.is(theme.data.colors.general.padding, 0);
+    // check that the palettes haven't been merged
+    t.is(theme.data.colors.palette.length, 1);
     // check a property coming from grand-parents theme "default"
     t.is(theme.data.easing, 'easeInOut');
 });

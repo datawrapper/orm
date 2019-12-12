@@ -22,6 +22,7 @@
         "url": "git+https://github.com/datawrapper/orm.git"
     },
     "dependencies": {
+        "assign-deep": "^1.0.1",
         "merge-deep": "^3.0.2",
         "mysql2": "1.7.0",
         "nanoid": "2.1.6",
