@@ -1,6 +1,6 @@
 const SQ = require('sequelize');
 const { db } = require('../index');
-const assign = require('assign-deep');
+const merge = require('merge-deep');
 
 const Theme = db.define(
     'theme',
@@ -37,14 +37,14 @@ Theme.belongsTo(Theme, { foreignKey: 'extend' });
  */
 Theme.prototype.getMergedData = async function() {
     let theme = this;
-    const data = [theme.get('data')];
+    const data = [theme.data];
     while (theme.get('extend')) {
         theme = await Theme.findByPk(theme.get('extend'));
-        data.push(theme.get('data'));
+        data.push(theme.data);
     }
     let merged = {};
     while (data.length) {
-        merged = assign(merged, data.pop());
+        merged = merge(merged, data.pop());
     }
     return merged;
 };
@@ -55,10 +55,10 @@ Theme.prototype.getMergedData = async function() {
  */
 Theme.prototype.getMergedAssets = async function() {
     let theme = this;
-    const assets = [theme.get('assets')];
+    const assets = [theme.assets];
     while (theme.get('extend')) {
         theme = await Theme.findByPk(theme.get('extend'));
-        if (theme.get('assets')) assets.push(theme.get('assets'));
+        if (theme.assets) assets.push(theme.assets);
     }
     let merged = {};
     while (assets.length) {
