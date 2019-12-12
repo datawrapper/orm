@@ -20,15 +20,8 @@ const Theme = db.define(
         less: SQ.TEXT,
 
         assets: {
-            type: SQ.TEXT,
-            allowNull: false,
-            get() {
-                const d = this.getDataValue('assets');
-                return JSON.parse(d);
-            },
-            set(assets) {
-                this.setDataValue('assets', JSON.stringify(assets, null, 4));
-            }
+            type: SQ.JSON,
+            allowNull: false
         }
     },
     {
