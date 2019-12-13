@@ -1,5 +1,6 @@
 const Theme = require('../models/Theme');
 const assign = require('assign-deep');
+const merge = require('merge-deep');
 const { indexBy } = require('underscore');
 
 /**
@@ -20,10 +21,10 @@ module.exports.getAllMergedThemes = async function() {
         const assets = [];
         const less = [];
         do {
-            data.push(theme.get('data'));
+            data.push(merge({}, theme.data));
             if (theme.assets) assets.push(theme.assets);
             if (theme.less) less.push(theme.less);
-            theme = themesById[theme.get('extend')];
+            theme = themesById[theme.extend];
         } while (theme);
         let mergedData = {};
         while (data.length) {
@@ -39,5 +40,6 @@ module.exports.getAllMergedThemes = async function() {
         theme.less = less.reverse().join('\n\n');
         out.push(theme);
     }
+
     return out;
 };

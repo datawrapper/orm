@@ -13,29 +13,15 @@ const Theme = db.define(
         title: SQ.STRING(128),
 
         data: {
-            type: SQ.TEXT,
-            allowNull: false,
-            get() {
-                const d = this.getDataValue('data');
-                return JSON.parse(d);
-            },
-            set(data) {
-                this.setDataValue('data', JSON.stringify(data, null, 4));
-            }
+            type: SQ.JSON,
+            allowNull: false
         },
 
         less: SQ.TEXT,
 
         assets: {
-            type: SQ.TEXT,
-            allowNull: false,
-            get() {
-                const d = this.getDataValue('assets');
-                return JSON.parse(d);
-            },
-            set(assets) {
-                this.setDataValue('assets', JSON.stringify(assets, null, 4));
-            }
+            type: SQ.JSON,
+            allowNull: false
         }
     },
     {
@@ -51,10 +37,10 @@ Theme.belongsTo(Theme, { foreignKey: 'extend' });
  */
 Theme.prototype.getMergedData = async function() {
     let theme = this;
-    const data = [theme.get('data')];
+    const data = [theme.data];
     while (theme.get('extend')) {
         theme = await Theme.findByPk(theme.get('extend'));
-        data.push(theme.get('data'));
+        data.push(theme.data);
     }
     let merged = {};
     while (data.length) {
@@ -69,10 +55,10 @@ Theme.prototype.getMergedData = async function() {
  */
 Theme.prototype.getMergedAssets = async function() {
     let theme = this;
-    const assets = [theme.get('assets')];
+    const assets = [theme.assets];
     while (theme.get('extend')) {
         theme = await Theme.findByPk(theme.get('extend'));
-        if (theme.get('assets')) assets.push(theme.get('assets'));
+        if (theme.assets) assets.push(theme.assets);
     }
     let merged = {};
     while (assets.length) {
