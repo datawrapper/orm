@@ -1,6 +1,6 @@
 const SQ = require('sequelize');
 const { db } = require('../index');
-const merge = require('merge-deep');
+const assign = require('assign-deep');
 
 const Theme = db.define(
     'theme',
@@ -44,7 +44,7 @@ Theme.prototype.getMergedData = async function() {
     }
     let merged = {};
     while (data.length) {
-        merged = merge(merged, data.pop());
+        merged = assign(merged, data.pop());
     }
     return merged;
 };
