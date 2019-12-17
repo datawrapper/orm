@@ -25,7 +25,7 @@ const PluginData = db.define(
 
 const Plugin = require('./Plugin');
 
-PluginData.belongsTo(Plugin);
+PluginData.belongsTo(Plugin, { foreignKey: 'plugin_id' });
 Plugin.hasMany(PluginData, { as: 'PluginData' });
 
 module.exports = PluginData;

@@ -16,8 +16,7 @@ const ChartAccessToken = db.define(
             autoIncrement: true
         },
 
-        token: SQ.STRING(128),
-        chart_id: SQ.STRING(5)
+        token: SQ.STRING(128)
     },
     {
         tableName: 'chart_access_token'
@@ -33,6 +32,6 @@ ChartAccessToken.newToken = async function({ chart_id }) {
 };
 
 const Chart = require('./Chart');
-ChartAccessToken.belongsTo(Chart);
+ChartAccessToken.belongsTo(Chart, { foreignKey: 'chart_id' });
 
 module.exports = ChartAccessToken;

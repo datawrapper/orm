@@ -15,7 +15,6 @@ const AuthToken = db.define(
             primaryKey: true,
             autoIncrement: true
         },
-        user_id: SQ.INTEGER,
         token: SQ.STRING(128),
         comment: SQ.STRING(255),
         last_used_at: SQ.DATE
@@ -35,6 +34,6 @@ AuthToken.newToken = async function({ user_id, comment }) {
 };
 
 const User = require('./User');
-AuthToken.belongsTo(User);
+AuthToken.belongsTo(User, { foreignKey: 'user_id' });
 
 module.exports = AuthToken;
