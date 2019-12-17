@@ -16,7 +16,8 @@ const ChartAccessToken = db.define(
             autoIncrement: true
         },
 
-        token: SQ.STRING(128)
+        token: SQ.STRING(128),
+        chart_id: SQ.STRING(5)
     },
     {
         tableName: 'chart_access_token'
