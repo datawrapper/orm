@@ -23,7 +23,7 @@ test('log a new AuthToken', async t => {
 
     await AuthToken.destroy({
         where: {
-            key: 'orm-test/run'
+            comment: 'orm-test/run'
         }
     });
 });
