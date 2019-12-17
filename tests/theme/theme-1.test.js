@@ -22,15 +22,16 @@ test('get theme.assets', async t => {
 });
 
 test('set theme.data', async t => {
-    let theme = t.context;
-    const data = theme.get('data');
+    const theme = t.context;
+    const data = theme.data;
+    // font size in db is 13
+    t.is(theme.data.typography.chart.fontSize, 13);
 
     // set fontsize to 15
-    data.typography.chart.fontSize = 15;
-    theme.set('data', data);
+    theme.set('data.typography.chart.fontSize', 15);
 
     // check if local data is ok
-    t.is(theme.get('data').typography.chart.fontSize, 15);
+    t.is(theme.data.typography.chart.fontSize, 15);
 
     // save change to DB
     await theme.save();
@@ -40,8 +41,7 @@ test('set theme.data', async t => {
     t.is(theme.data.typography.chart.fontSize, 15);
 
     // reset value to 13
-    data.typography.chart.fontSize = 13;
-    theme.set('data', data);
+    theme.set('data.typography.chart.fontSize', 13);
     await theme.save();
     await theme.reload();
     t.is(theme.data.typography.chart.fontSize, 13);
