@@ -1,5 +1,5 @@
 const test = require('ava');
-const { close, init } = require('../index');
+const { close, init } = require('./index');
 
 /*
  * user 1 is an admin who does not have anything
@@ -8,7 +8,7 @@ const { close, init } = require('../index');
 
 test.before(async t => {
     await init();
-    const userData = require('../../utils/userData');
+    const userData = require('../utils/userData');
     t.context = userData;
 });
 
