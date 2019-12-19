@@ -56,4 +56,12 @@ test('check if action was actually stored', async t => {
     t.is(action.details, random);
 });
 
+test('log action without user id', async t => {
+    const { logAction } = t.context;
+    const action = await logAction(null, 'orm-test/no-user', 'details');
+    t.is(action.user_id, null);
+    t.is(action.key, 'orm-test/no-user');
+    await action.destroy();
+});
+
 test.after(t => close);
