@@ -135,7 +135,7 @@ function phpSerialize(mixedValue) {
 
             for (key in mixedValue) {
                 /* https://eslint.org/docs/rules/no-prototype-builtins */
-                if (Object.prototype.hasOwnProperty.call(hasOwnProperty, key)) {
+                if (Object.prototype.hasOwnProperty.call(mixedValue, key)) {
                     ktype = _getType(mixedValue[key]);
                     if (ktype === 'function') {
                         continue;
