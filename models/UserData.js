@@ -28,7 +28,7 @@ const UserData = db.define(
 
 const User = require('./User');
 
-UserData.belongsTo(User);
+UserData.belongsTo(User, { foreignKey: 'user_id' });
 User.hasMany(UserData, { as: 'UserData' });
 
 module.exports = UserData;

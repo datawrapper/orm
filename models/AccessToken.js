@@ -34,6 +34,6 @@ AccessToken.newToken = async function({ user_id, type, data }) {
 };
 
 const User = require('./User');
-AccessToken.belongsTo(User);
+AccessToken.belongsTo(User, { foreignKey: 'user_id' });
 
 module.exports = AccessToken;

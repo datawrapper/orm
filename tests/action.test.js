@@ -1,10 +1,10 @@
 const test = require('ava');
-const { close, init } = require('../index');
+const { close, init } = require('./index');
 
 test.before(async t => {
     await init();
-    const { Action, User } = require('../../models');
-    const { logAction } = require('../../utils/action');
+    const { Action, User } = require('../models');
+    const { logAction } = require('../utils/action');
     const user = await User.findByPk(1);
     t.context = { Action, logAction, user };
 });
@@ -17,9 +17,11 @@ test('log a new action', async t => {
 
     res = await logAction(user.id, 'orm-test/run', 123);
     t.is(res.details, 123);
+    t.is(res.user_id, user.id);
 
     res = await logAction(2, 'orm-test/run', 'a string');
     t.is(res.details, 'a string');
+    t.is(res.user_id, 2);
 
     res = await logAction(user.id, 'orm-test/run', true);
     t.is(res.details, 'true');
@@ -52,6 +54,14 @@ test('check if action was actually stored', async t => {
     // out of curiosity, check if we can access properties
     // after action has been destroyed
     t.is(action.details, random);
+});
+
+test('log action without user id', async t => {
+    const { logAction } = t.context;
+    const action = await logAction(null, 'orm-test/no-user', 'details');
+    t.is(action.user_id, null);
+    t.is(action.key, 'orm-test/no-user');
+    await action.destroy();
 });
 
 test.after(t => close);

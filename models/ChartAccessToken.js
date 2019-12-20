@@ -5,7 +5,7 @@ const generate = require('nanoid/generate');
 const alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 
 /*
- * this model is deprecated, we'll switch to AccessToken soons
+ * this model is deprecated, we'll switch to AccessToken some day
  */
 const ChartAccessToken = db.define(
     'chart_access_token',
@@ -32,6 +32,6 @@ ChartAccessToken.newToken = async function({ chart_id }) {
 };
 
 const Chart = require('./Chart');
-ChartAccessToken.belongsTo(Chart);
+ChartAccessToken.belongsTo(Chart, { foreignKey: 'chart_id' });
 
 module.exports = ChartAccessToken;
