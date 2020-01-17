@@ -58,7 +58,15 @@ test('check if action was actually stored', async t => {
 
 test('log action without user id', async t => {
     const { logAction } = t.context;
-    const action = await logAction(null, 'orm-test/no-user', 'details');
+    let action = await logAction(null, 'orm-test/no-user', 'details');
+    await action.reload();
+    t.is(action.user_id, null);
+    t.is(action.key, 'orm-test/no-user');
+    await action.destroy();
+
+    // test if it also works with user_id: undefined
+    action = await logAction(undefined, 'orm-test/no-user', 'details');
+    await action.reload();
     t.is(action.user_id, null);
     t.is(action.key, 'orm-test/no-user');
     await action.destroy();
