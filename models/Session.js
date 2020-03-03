@@ -16,6 +16,8 @@ const Session = db.define(
             allowNull: true
         },
 
+        persistent: SQ.BOOLEAN,
+
         data: {
             type: SQ.TEXT,
             allowNull: false,
