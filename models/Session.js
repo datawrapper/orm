@@ -11,6 +11,11 @@ const Session = db.define(
             field: 'session_id'
         },
 
+        user_id: {
+            type: SQ.INTEGER,
+            allowNull: true
+        },
+
         data: {
             type: SQ.TEXT,
             allowNull: false,
