@@ -8,6 +8,7 @@ module.exports = {
         lul: {}
     },
     orm: {
+        chartIdSalt: 'TEST_SALT',
         db: {
             dialect: 'mysql',
             host: process.env.DB_HOST,

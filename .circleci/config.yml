@@ -1,7 +1,7 @@
 defaults: &defaults
   working_directory: ~/repo
   docker:
-    - image: circleci/node:10
+    - image: circleci/node:12
 
 cache: &cache
     key: v1-dependency-cache-{{ checksum "package-lock.json" }}
@@ -29,10 +29,10 @@ jobs:
           <<: *cache
 
       - run:
+          name: Tests
           command: |
-            mv tests/config.ci.js tests/config.js
             mkdir -p ~/reports/ava
-            npm test -- --tap | npx tap-xunit > ~/reports/ava/results.xml
+            DW_CONFIG_PATH=tests/config.ci.js npx ava --tap | npx tap-xunit > ~/reports/ava/results.xml
       - store_test_results:
           path: ~/reports
       - store_artifacts:

@@ -1,10 +1,25 @@
+const crypto = require('crypto');
 const SQ = require('sequelize');
-const { db } = require('../index');
+const { db, chartIdSalt } = require('../index');
 
 const Chart = db.define(
     'chart',
     {
         id: { type: SQ.STRING(5), primaryKey: true },
+        publicId: {
+            type: SQ.VIRTUAL,
+            get() {
+                if (chartIdSalt) {
+                    const hash = crypto.createHash('md5');
+                    hash.update(`${this.id}--${this.createdAt.toISOString()}--${chartIdSalt}`);
+                    return hash.digest('hex');
+                }
+                return this.id;
+            },
+            set() {
+                throw new Error('"publicId" is a virtual value and cannot be changed');
+            }
+        },
         type: SQ.STRING,
         title: SQ.STRING,
         theme: SQ.STRING,
