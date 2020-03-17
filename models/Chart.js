@@ -9,7 +9,7 @@ const Chart = db.define(
         publicId: {
             type: SQ.VIRTUAL,
             get() {
-                if (chartIdSalt) {
+                if (this.id && this.createdAt && chartIdSalt) {
                     const hash = crypto.createHash('md5');
                     hash.update(`${this.id}--${this.createdAt.toISOString()}--${chartIdSalt}`);
                     return hash.digest('hex');
