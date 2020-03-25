@@ -74,5 +74,4 @@ Chart.prototype.isPublishableBy = async function(user) {
     return false;
 };
 
-
 module.exports = Chart;
