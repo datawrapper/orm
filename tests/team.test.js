@@ -11,10 +11,10 @@ test.before(async t => {
     t.context = await Team.findByPk('team-1');
 });
 
-test('team.getUsers returns two users', async t => {
+test('team.getUsers returns three users', async t => {
     t.is(typeof t.context.getUsers, 'function', 'team.getUsers() is undefined');
     const result = await t.context.getUsers();
-    t.is(result.length, 2);
+    t.is(result.length, 3);
 });
 
 test.after(t => close);
