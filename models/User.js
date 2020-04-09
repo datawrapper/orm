@@ -166,4 +166,39 @@ User.prototype.getPlugins = async function() {
     return hasAccess;
 };
 
+/*
+ * returns the highest-priority product that is enabled for this user
+ */
+User.prototype.getActiveProduct = async function() {
+    const UserProduct = require('./UserProduct');
+    const Product = require('./Product');
+    const user = this;
+    // get user products, highest priority first
+    const userProducts = await user.getProducts({
+        order: [['priority', 'DESC']]
+    });
+    const userProduct = userProducts.length ? userProducts[0] : null;
+    // get team products, highest priority first
+    const teams = await user.getTeams();
+    const teamProducts = [];
+    if (teams.length) {
+        for (var i = teams.length - 1; i >= 0; i--) {
+            const tp = await teams[i].getProducts({
+                order: [['priority', 'DESC']]
+            });
+            if (tp.length) teamProducts.push(tp[0]);
+        }
+    }
+    // sort each teams highest priority products by priority, again
+    const teamProduct = teamProducts.sort((a, b) => b.priority - a.priority)[0];
+
+    if (userProduct && (!teamProduct || userProduct.priority > teamProduct.priority)) {
+        return userProduct;
+    }
+    if (teamProduct && (!userProduct || teamProduct.priority > userProduct.priority)) {
+        return teamProduct;
+    }
+    return null;
+};
+
 module.exports = User;
