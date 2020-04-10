@@ -17,13 +17,13 @@ test.before(async t => {
         attributes: {
             include: [[db.fn('COUNT', db.col('charts.id')), 'chart_count']]
         },
-        order: [[db.fn('COUNT', db.literal('charts.id')), 'DESC']]
+        order: [[db.fn('COUNT', db.literal('charts.id')), 'DESC'], ['id', 'ASC']]
     });
 });
 
-test('found three users, sorted by chart count', t => {
-    // 3 users in total
-    t.is(t.context.length, 3);
+test('found five users, sorted by chart count', t => {
+    // 4 users in total
+    t.is(t.context.length, 5);
     // first has two charts
     t.is(t.context[0].get('email'), 'ci3@datawrapper.de');
     t.is(t.context[0].get('chart_count'), 2);
