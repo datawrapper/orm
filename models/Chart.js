@@ -55,6 +55,7 @@ Chart.belongsTo(Chart, {
 });
 
 Chart.prototype.isEditableBy = async function(user, session) {
+    if (this.deleted) return false;
     if (user) {
         return user.mayEditChart(this);
     } else if (session) {
