@@ -56,10 +56,11 @@ Chart.belongsTo(Chart, {
 
 Chart.prototype.isEditableBy = async function(user, session) {
     if (this.deleted) return false;
-    if (user) {
+
+    if (user && user.role !== 'guest') {
         return user.mayEditChart(this);
     } else if (session) {
-        return this.guest_session && this.guest_session === session.id;
+        return this.guest_session && this.guest_session === session;
     }
     return false;
 };
