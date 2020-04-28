@@ -38,14 +38,8 @@ test('process task', async t => {
     await t.context.process();
     t.is(t.context.log.attempts, 2);
     // lets log some progress in between
-    await t.context.logProgress({ message: 'foo' });
-    t.is(t.context.log.attempts, 2);
-    // process 3 more times
-    await t.context.process();
-    await t.context.process();
-    await t.context.process();
     await t.context.reload();
-    t.is(t.context.log.attempts, 5);
+    t.is(t.context.log.attempts, 2);
 });
 
 test('log progress', async t => {
