@@ -59,9 +59,8 @@ ExportJob.prototype.process = async function() {
 ExportJob.prototype.logProgress = async function(info) {
     info.timestamp = new Date();
     const log = this.get('log') || {};
-    log.progress = log.progress || [];
-    log.progress.push(info);
-    this.set('log', log);
+    const progress = (log.progress || []).concat([info]);
+    this.set('log', { ...log, progress });
     return this.save({ fields: ['log'] });
 };
 
