@@ -50,7 +50,7 @@ ExportJob.prototype.process = async function() {
     log.attempts = (log.attempts || 0) + 1;
     this.set('log', log);
     this.processed_at = new Date();
-    return this.save();
+    return this.save({ fields: ['processed_at', 'log'] });
 };
 
 /**
@@ -59,10 +59,9 @@ ExportJob.prototype.process = async function() {
 ExportJob.prototype.logProgress = async function(info) {
     info.timestamp = new Date();
     const log = this.get('log') || {};
-    log.progress = log.progress || [];
-    log.progress.push(info);
-    this.set('log', log);
-    return this.save();
+    const progress = (log.progress || []).concat([info]);
+    this.set('log', { ...log, progress });
+    return this.save({ fields: ['log'] });
 };
 
 const User = require('./User');

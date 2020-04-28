@@ -10,47 +10,89 @@ test.before(async t => {
     await init();
     const { ExportJob } = require('../models');
     // create new test job
-    t.context = await ExportJob.create({
-        chart_id: 'aaaaa',
-        user_id: 1,
-        key: 'test-task',
-        created_at: new Date(),
-        status: 'queued',
-        priority: 0,
-        tasks: [{ action: 'sleep', params: { delay: 500 } }]
-    });
+    const cleanUp = [];
+    t.context = {
+        cleanUp,
+        async createJob() {
+            const job = await ExportJob.create({
+                chart_id: 'aaaaa',
+                user_id: 1,
+                key: 'test-task',
+                created_at: new Date(),
+                status: 'queued',
+                priority: 0,
+                tasks: [{ action: 'sleep', params: { delay: 500 } }]
+            });
+            cleanUp.push(job);
+            return job;
+        }
+    };
 });
 
 test('task exists', async t => {
-    t.is(typeof t.context.tasks, 'object', 'job.tasks is no object');
-    t.is(t.context.tasks.length, 1);
+    const job = await t.context.createJob();
+    t.is(typeof job.tasks, 'object', 'job.tasks is no object');
+    t.is(job.tasks.length, 1);
 });
 
 test('process task', async t => {
-    t.is(typeof t.context.process, 'function');
-    t.is(typeof t.context.log, 'undefined');
-    await t.context.process();
-    t.is(typeof t.context.log, 'object');
-    t.is(t.context.log.attempts, 1);
-    t.is(t.context.user_id, 1);
-    t.is(t.context.chart_id, 'aaaaa');
+    const job = await t.context.createJob();
+    t.is(typeof job.process, 'function');
+    t.is(typeof job.log, 'undefined');
+    await job.process();
+    t.is(typeof job.log, 'object');
+    t.is(job.log.attempts, 1);
+    t.is(job.user_id, 1);
+    t.is(job.chart_id, 'aaaaa');
     // one more process attempt
-    await t.context.process();
-    t.is(t.context.log.attempts, 2);
+    await job.process();
+    t.is(job.log.attempts, 2);
+    // lets check if attempts where really incremented
+    await job.reload();
+    t.is(job.log.attempts, 2);
+    // one more time
+    await job.process();
+    await job.reload();
+    t.is(job.log.attempts, 3);
 });
 
 test('log progress', async t => {
-    t.is(typeof t.context.logProgress, 'function');
-    await t.context.logProgress({ message: 'foo' });
-    t.is(typeof t.context.log.progress, 'object');
-    t.is(t.context.log.progress.length, 1);
-    t.is(t.context.log.progress[0].message, 'foo');
-    t.truthy(t.context.log.progress[0].timestamp instanceof Date);
-    await t.context.logProgress({ message: 'another message' });
-    t.is(t.context.log.progress.length, 2);
+    const job = await t.context.createJob();
+    t.is(typeof job.logProgress, 'function');
+    await job.logProgress({ message: 'foo' });
+    await job.reload();
+    t.is(typeof job.log.progress, 'object');
+    t.is(job.log.progress.length, 1);
+    t.is(job.log.progress[0].message, 'foo');
+    await job.logProgress({ message: 'another message' });
+    await job.reload();
+    t.is(job.log.progress.length, 2);
+});
+
+test('process & progress', async t => {
+    const job = await t.context.createJob();
+    await job.process();
+    await job.logProgress({ message: 'foo' });
+    await job.reload();
+    t.is(job.log.attempts, 1);
+    t.is(job.log.progress.length, 1);
+
+    // more progress
+    await job.logProgress({ message: 'foo' });
+    await job.reload();
+    t.is(job.log.attempts, 1);
+    t.is(job.log.progress.length, 2);
+
+    // process again
+    await job.process();
+    await job.reload();
+    t.is(job.log.attempts, 2);
+    t.is(job.log.progress.length, 2);
 });
 
 test.after(async t => {
-    await t.context.destroy();
+    for (let i = 0; i < t.context.cleanUp.length; i++) {
+        await t.context.cleanUp[i].destroy();
+    }
     close();
 });
