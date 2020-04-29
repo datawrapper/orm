@@ -129,7 +129,7 @@ User.prototype.getAllProducts = async function() {
 User.prototype.mayUsePlugin = async function(pluginId) {
     // check if the plugin is available for everyone
     const Plugin = require('./Plugin');
-    const plugin = await Plugin.fineOne({
+    const plugin = await Plugin.findOne({
         where: {
             id: pluginId,
             enabled: true
