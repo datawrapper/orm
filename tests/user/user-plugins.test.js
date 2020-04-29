@@ -13,4 +13,8 @@ test('user 1 has access to plugin', async t => {
     t.true(plugins.includes('export-pdf'));
 });
 
+test('user may use plugin', async t => {
+    t.true(await t.context.mayUsePlugin('export-pdf'));
+});
+
 test.after(t => close);
