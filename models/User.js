@@ -127,16 +127,26 @@ User.prototype.getAllProducts = async function() {
  * @returns true|false
  */
 User.prototype.mayUsePlugin = async function(pluginId) {
+    // check if the plugin is available for everyone
     const Plugin = require('./Plugin');
-    const plugin = await Plugin.findByPk(pluginId);
-    if (!plugin.is_private) return true;
-    // look through all the products of this user
-    const products = await this.getAllProducts();
-    for (const product of products) {
-        const allow = await product.hasPlugin(pluginId);
-        if (allow) return true;
+    const plugin = await Plugin.findOne({
+        where: {
+            id: pluginId,
+            enabled: true
+        }
+    });
+    if (!plugin) {
+        // the plugin doesn't exist or is disabled
+        return false;
     }
-    return false;
+    if (!plugin.is_private) {
+        // the plugin exists and is not set to private
+        return true;
+    }
+    // finally if the user has access to the plugin
+    const userPlugins = await this.getUserPluginCache();
+    const plugins = userPlugins && userPlugins.plugins ? userPlugins.plugins.split(',') : [];
+    return plugins.includes(pluginId);
 };
 
 /*
