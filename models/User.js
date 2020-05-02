@@ -202,12 +202,13 @@ User.prototype.getActiveProduct = async function() {
     // sort each teams highest priority products by priority, again
     const teamProduct = teamProducts.sort((a, b) => b.priority - a.priority)[0];
 
-    if (userProduct && (!teamProduct || userProduct.priority > teamProduct.priority)) {
+    if (userProduct && (!teamProduct || userProduct.priority >= teamProduct.priority)) {
         return userProduct;
     }
     if (teamProduct && (!userProduct || teamProduct.priority > userProduct.priority)) {
         return teamProduct;
     }
+
     return null;
 };
 
