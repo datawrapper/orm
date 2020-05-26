@@ -67,4 +67,50 @@ Theme.prototype.getMergedAssets = async function() {
     return merged;
 };
 
+Theme.prototype.addAssetFile = function(name, url) {
+    return this.addAsset('file', name, { url });
+};
+
+Theme.prototype.addAssetFont = function(name, method, urls) {
+    const data = { method };
+    if (method === 'import') data.import = urls.import;
+    else data.files = urls;
+    return this.addAsset('font', name, data);
+};
+
+Theme.prototype.addAsset = function(type, name, data) {
+    if (!this.assets) this.assets = {};
+    this.assets[name] = {
+        type,
+        ...data
+    };
+    return this.save({ fields: ['assets'] });
+};
+
+Theme.prototype.getAssetUrl = function(name) {
+    return this.assets && this.assets[name] ? this.assets[name].url : null;
+};
+
+Theme.prototype.getAssets = async function(type) {
+    const assets = await this.getMergedAssets();
+    return Object.entries(assets)
+        .map(([name, value]) => ({ ...value, name }))
+        .filter(d => !type || d.type === type);
+};
+
+Theme.prototype.getAssetFiles = function() {
+    return this.getAssets('file');
+};
+
+Theme.prototype.getAssetFonts = function() {
+    return this.getAssets('font');
+};
+
+Theme.prototype.removeAsset = async function(name) {
+    if (this.assets[name]) {
+        delete this.assets[name];
+        return this.save({ fields: ['assets'] });
+    }
+};
+
 module.exports = Theme;
