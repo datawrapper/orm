@@ -80,10 +80,12 @@ Theme.prototype.addAssetFont = function(name, method, urls) {
 
 Theme.prototype.addAsset = function(type, name, data) {
     if (!this.assets) this.assets = {};
-    this.assets[name] = {
+    const assets = { ...this.assets };
+    assets[name] = {
         type,
         ...data
     };
+    this.set('assets', assets);
     return this.save({ fields: ['assets'] });
 };
 
@@ -108,7 +110,9 @@ Theme.prototype.getAssetFonts = function() {
 
 Theme.prototype.removeAsset = async function(name) {
     if (this.assets[name]) {
-        delete this.assets[name];
+        const assets = { ...this.assets };
+        delete assets[name];
+        this.set('assets', assets);
         return this.save({ fields: ['assets'] });
     }
 };
