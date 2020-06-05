@@ -43,4 +43,11 @@ Team.prototype.invalidatePluginCache = async function() {
 const Theme = require('./Theme');
 Team.belongsTo(Theme, { foreignKey: 'default_theme' });
 
+Team.prototype.serialize = function() {
+    const d = this.toJSON();
+    // delete non-safe properties
+    delete d.settings;
+    return d;
+};
+
 module.exports = Team;
