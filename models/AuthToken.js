@@ -29,7 +29,7 @@ AuthToken.newToken = async function({ user_id, comment }) {
     return AuthToken.create({
         user_id,
         comment,
-        token: generate(alphabet, 32)
+        token: generate(alphabet, 64)
     });
 };
 

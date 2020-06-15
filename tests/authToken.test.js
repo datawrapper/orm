@@ -18,7 +18,7 @@ test('log a new AuthToken', async t => {
 
     t.is(res.comment, 'orm-test/run');
     t.is(typeof res.token, 'string');
-    t.is(res.token.length, 32);
+    t.is(res.token.length, 64);
     t.is(res.user_id, user.id);
 
     await AuthToken.destroy({
