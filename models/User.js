@@ -73,6 +73,13 @@ User.prototype.isAdmin = function() {
 };
 
 /*
+ * check if the user has activated their account
+ */
+User.prototype.isActivated = function() {
+    return !this.activate_token;
+};
+
+/*
  * check if the user is allowed to view and edit a chart
  */
 User.prototype.mayEditChart = async function(chart) {
