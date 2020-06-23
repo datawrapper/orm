@@ -76,7 +76,7 @@ User.prototype.isAdmin = function() {
  * check if the user has activated their account
  */
 User.prototype.isActivated = function() {
-    return this.activate_token === '' && this.role !== 'pending' && this.role !== 'guest';
+    return !this.activate_token && this.role !== 'pending' && this.role !== 'guest';
 };
 
 /*
