@@ -68,9 +68,7 @@ Chart.prototype.isEditableBy = async function(user, session) {
 Chart.prototype.isPublishableBy = async function(user) {
     if (user) {
         // guests and pending users are not allowed to publish
-        if (user.role === 'pending' || user.role === 'guest') {
-            return false;
-        }
+        if (!user.isActivated()) return false;
         return user.mayEditChart(this);
     }
     return false;
