@@ -219,4 +219,30 @@ User.prototype.getActiveProduct = async function() {
     return null;
 };
 
+/*
+ * returns the currently active team, or null if it doesn't exist
+ */
+User.prototype.getActiveTeam = async function(session) {
+    const { getUserData } = require('../utils/userData');
+
+    const teams = await this.getTeams();
+    if (teams.length < 1) return null;
+
+    let activeTeam = await getUserData(this, 'active_team');
+
+    if (!activeTeam && session) {
+        activeTeam = session.data['dw-user-organization'];
+    }
+
+    if (activeTeam === '%none%') return null;
+
+    for (const team of teams) {
+        if (team.id === activeTeam) {
+            return team;
+        }
+    }
+
+    return teams[0];
+};
+
 module.exports = User;
