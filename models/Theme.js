@@ -67,6 +67,19 @@ Theme.prototype.getMergedAssets = async function() {
     return merged;
 };
 
+/*
+ * retreive "merged" theme less
+ */
+Theme.prototype.getMergedLess = async function() {
+    let theme = this;
+    let less = theme.less;
+    while (theme.get('extend')) {
+        theme = await Theme.findByPk(theme.get('extend'));
+        less += '\n\n\n' + theme.less;
+    }
+    return less;
+};
+
 Theme.prototype.addAssetFile = function(name, url) {
     return this.addAsset('file', name, { url });
 };
