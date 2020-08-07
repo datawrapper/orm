@@ -16,15 +16,4 @@ test('get metadata properties', t => {
     t.is(t.context.metadata.publish['embed-width'], 600);
 });
 
-test('chart has publicId', t => {
-    t.log(t.context.publicId);
-    t.truthy(t.context.publicId);
-});
-
-test('cannot set publicId', t => {
-    t.throws(() => {
-        t.context.publicId = 'foo';
-    });
-});
-
 test.after(t => close);

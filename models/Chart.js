@@ -1,25 +1,12 @@
 const crypto = require('crypto');
 const SQ = require('sequelize');
 const { db, chartIdSalt } = require('../index');
+const Team = require('../models/Team');
 
 const Chart = db.define(
     'chart',
     {
         id: { type: SQ.STRING(5), primaryKey: true },
-        publicId: {
-            type: SQ.VIRTUAL,
-            get() {
-                if (this.id && this.createdAt && chartIdSalt) {
-                    const hash = crypto.createHash('md5');
-                    hash.update(`${this.id}--${this.createdAt.toISOString()}--${chartIdSalt}`);
-                    return hash.digest('hex');
-                }
-                return this.id;
-            },
-            set() {
-                throw new Error('"publicId" is a virtual value and cannot be changed');
-            }
-        },
         type: SQ.STRING,
         title: SQ.STRING,
         theme: SQ.STRING,
@@ -53,6 +40,25 @@ const Chart = db.define(
 Chart.belongsTo(Chart, {
     foreignKey: 'forked_from'
 });
+
+Chart.prototype.getPublicId = async function() {
+    let useHash = false;
+
+    if (this.id && this.createdAt && chartIdSalt) {
+        useHash = true;
+    } else if (this.organization_id) {
+        const team = await Team.findByPk(this.organization_id);
+        useHash = team.settings && team.settings.hashPublishing;
+    }
+
+    if (!useHash) {
+        return this.id;
+    }
+
+    const hash = crypto.createHash('md5');
+    hash.update(`${this.id}--${this.createdAt.toISOString()}--${chartIdSalt}`);
+    return hash.digest('hex');
+};
 
 Chart.prototype.isEditableBy = async function(user, session) {
     if (this.deleted) return false;
