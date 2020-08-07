@@ -48,7 +48,10 @@ Chart.prototype.getPublicId = async function() {
         useHash = true;
     } else if (this.organization_id) {
         const team = await Team.findByPk(this.organization_id);
-        useHash = team.settings && team.settings.hashPublishing;
+        useHash =
+            team.settings &&
+            team.settings.publishTarget &&
+            team.settings.publishTarget.hash_publishing;
     }
 
     if (!useHash) {
