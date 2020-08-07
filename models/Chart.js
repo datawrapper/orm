@@ -1,6 +1,7 @@
 const crypto = require('crypto');
 const SQ = require('sequelize');
 const { db, chartIdSalt } = require('../index');
+const Team = require('../models/Team');
 
 const Chart = db.define(
     'chart',
@@ -69,6 +70,15 @@ Chart.prototype.isPublishableBy = async function(user) {
     if (user) {
         // guests and pending users are not allowed to publish
         if (!user.isActivated()) return false;
+
+        if (this.organization_id) {
+            const team = await Team.findByPk(this.organization_id);
+
+            if (team.settings && team.settings.restrictPublishToAdministrators) {
+                return user.mayAdministrateTeam(team.id);
+            }
+        }
+
         return user.mayEditChart(this);
     }
     return false;
