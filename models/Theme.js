@@ -72,10 +72,10 @@ Theme.prototype.getMergedAssets = async function() {
  */
 Theme.prototype.getMergedLess = async function() {
     let theme = this;
-    let less = theme.less;
+    let less = theme.less || '';
     while (theme.get('extend')) {
         theme = await Theme.findByPk(theme.get('extend'));
-        less = theme.less + '\n\n\n' + less;
+        less = (theme.less || '') + '\n\n\n' + less;
     }
     return less;
 };
