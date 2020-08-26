@@ -75,7 +75,7 @@ Theme.prototype.getMergedLess = async function() {
     let less = theme.less;
     while (theme.get('extend')) {
         theme = await Theme.findByPk(theme.get('extend'));
-        less += '\n\n\n' + theme.less;
+        less = theme.less + '\n\n\n' + less;
     }
     return less;
 };
