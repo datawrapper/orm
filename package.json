@@ -30,7 +30,7 @@
         "underscore": "1.9.1"
     },
     "devDependencies": {
-        "@datawrapper/shared": "^0.27.4",
+        "@datawrapper/shared": "^0.27.6",
         "ava": "~2.4.0",
         "babel-eslint": "~10.0.3",
         "dotenv": "8.2.0",
