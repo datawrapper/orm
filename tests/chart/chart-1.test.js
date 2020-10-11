@@ -17,14 +17,7 @@ test('get metadata properties', t => {
 });
 
 test('chart has publicId', t => {
-    t.log(t.context.publicId);
-    t.truthy(t.context.publicId);
-});
-
-test('cannot set publicId', t => {
-    t.throws(() => {
-        t.context.publicId = 'foo';
-    });
+    t.is(typeof t.context.getPublicId, 'function');
 });
 
 test.after(t => close);
