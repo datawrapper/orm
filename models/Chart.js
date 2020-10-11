@@ -2,6 +2,7 @@ const crypto = require('crypto');
 const SQ = require('sequelize');
 const { db, chartIdSalt } = require('../index');
 const Team = require('../models/Team');
+const get = require('lodash/get');
 
 const Chart = db.define(
     'chart',
@@ -42,25 +43,17 @@ Chart.belongsTo(Chart, {
 });
 
 Chart.prototype.getPublicId = async function() {
-    let useHash = false;
-
-    if (this.id && this.createdAt && chartIdSalt) {
-        useHash = true;
-    } else if (this.organization_id) {
+    if (this.id && chartIdSalt && this.createdAt && this.organization_id) {
         const team = await Team.findByPk(this.organization_id);
-        useHash =
-            team.settings &&
-            team.settings.publishTarget &&
-            team.settings.publishTarget.hash_publishing;
+
+        if (get(team, 'settings.publishTarget.hash_publishing')) {
+            const hash = crypto.createHash('md5');
+            hash.update(`${this.id}--${this.createdAt.toISOString()}--${chartIdSalt}`);
+            return hash.digest('hex');
+        }
     }
 
-    if (!useHash) {
-        return this.id;
-    }
-
-    const hash = crypto.createHash('md5');
-    hash.update(`${this.id}--${this.createdAt.toISOString()}--${chartIdSalt}`);
-    return hash.digest('hex');
+    return this.id;
 };
 
 Chart.prototype.isEditableBy = async function(user, session) {
