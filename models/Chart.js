@@ -76,4 +76,13 @@ Chart.prototype.isPublishableBy = async function(user) {
     return false;
 };
 
+Chart.prototype.getThumbnailHash = function() {
+    if (this.createdAt) {
+        return crypto
+            .createHash('md5')
+            .update(`${this.id}--${this.createdAt.getTime() / 1000}`)
+            .digest('hex');
+    }
+};
+
 module.exports = Chart;
