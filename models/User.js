@@ -151,9 +151,21 @@ User.prototype.mayUsePlugin = async function(pluginId) {
         return true;
     }
     // finally if the user has access to the plugin
-    const userPlugins = await this.getUserPluginCache();
-    const plugins = userPlugins && userPlugins.plugins ? userPlugins.plugins.split(',') : [];
-    return plugins.includes(pluginId);
+    const cachedUserPlugins = await this.getUserPluginCache();
+    const cachedPlugins =
+        cachedUserPlugins && cachedUserPlugins.plugins ? cachedUserPlugins.plugins.split(',') : [];
+
+    if (cachedPlugins.includes(pluginId)) {
+        return true;
+    }
+
+    const userPlugins = await this.getPlugins();
+
+    if (userPlugins.filter(plugin => plugin.id === pluginId).length > 0) {
+        return true;
+    }
+
+    return false;
 };
 
 /*
