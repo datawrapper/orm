@@ -150,10 +150,17 @@ User.prototype.mayUsePlugin = async function(pluginId) {
         // the plugin exists and is not set to private
         return true;
     }
+
     // finally if the user has access to the plugin
-    const userPlugins = await this.getUserPluginCache();
-    const plugins = userPlugins && userPlugins.plugins ? userPlugins.plugins.split(',') : [];
-    return plugins.includes(pluginId);
+    const cachedUserPlugins = await this.getUserPluginCache();
+
+    if (cachedUserPlugins) {
+        const cachedPlugins = cachedUserPlugins.plugins ? cachedUserPlugins.plugins.split(',') : [];
+        return cachedPlugins.includes(pluginId);
+    }
+
+    const userPlugins = await this.getPlugins();
+    return userPlugins.filter(plugin => plugin.id === pluginId).length > 0;
 };
 
 /*
