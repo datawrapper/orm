@@ -160,12 +160,7 @@ User.prototype.mayUsePlugin = async function(pluginId) {
     }
 
     const userPlugins = await this.getPlugins();
-
-    if (userPlugins.filter(plugin => plugin.id === pluginId).length > 0) {
-        return true;
-    }
-
-    return false;
+    return userPlugins.filter(plugin => plugin.id === pluginId).length > 0;
 };
 
 /*
