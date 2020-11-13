@@ -150,13 +150,13 @@ User.prototype.mayUsePlugin = async function(pluginId) {
         // the plugin exists and is not set to private
         return true;
     }
+
     // finally if the user has access to the plugin
     const cachedUserPlugins = await this.getUserPluginCache();
-    const cachedPlugins =
-        cachedUserPlugins && cachedUserPlugins.plugins ? cachedUserPlugins.plugins.split(',') : [];
 
-    if (cachedPlugins.includes(pluginId)) {
-        return true;
+    if (cachedUserPlugins) {
+        const cachedPlugins = cachedUserPlugins.plugins ? cachedUserPlugins.plugins.split(',') : [];
+        return cachedPlugins.includes(pluginId);
     }
 
     const userPlugins = await this.getPlugins();
