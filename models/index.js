@@ -3,7 +3,6 @@ const models = {};
 [
     'AccessToken',
     'Action',
-    'AuthToken',
     'Chart',
     'ChartPublic',
     'ChartAccessToken', // deprecated
