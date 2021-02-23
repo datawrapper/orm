@@ -41,6 +41,7 @@ const ORM = {
                 ORM.db.Sequelize = Sequelize;
                 ORM.token_salt = config.secure_auth_salt || '';
                 ORM.chartIdSalt = config.orm.chartIdSalt;
+                ORM.hashPublishing = config.orm.hashPublishing;
                 ORM.plugins = configuredPlugins;
                 ORM.registerPlugins = createRegisterPlugins(ORM, configuredPlugins);
             } catch (err) {
