@@ -1,6 +1,6 @@
 const crypto = require('crypto');
 const SQ = require('sequelize');
-const { db, chartIdSalt } = require('../index');
+const { db, chartIdSalt, hashPublishing } = require('../index');
 const Team = require('../models/Team');
 const get = require('lodash/get');
 
@@ -43,10 +43,19 @@ Chart.belongsTo(Chart, {
 });
 
 Chart.prototype.getPublicId = async function() {
-    if (this.id && chartIdSalt && this.createdAt && this.organization_id) {
-        const team = await Team.findByPk(this.organization_id);
+    if (this.id && chartIdSalt && this.createdAt) {
+        let hash = false;
 
-        if (get(team, 'settings.publishTarget.hash_publishing')) {
+        if (this.organization_id) {
+            const team = await Team.findByPk(this.organization_id);
+            hash = !!get(team, 'settings.publishTarget.hash_publishing');
+        }
+
+        if (hashPublishing) {
+            hash = true;
+        }
+
+        if (hash) {
             const hash = crypto.createHash('md5');
             hash.update(`${this.id}--${this.createdAt.toISOString()}--${chartIdSalt}`);
             return hash.digest('hex');
