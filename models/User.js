@@ -88,7 +88,23 @@ User.prototype.mayEditChart = async function(chart) {
     // the user has admin privilegen
     if (this.role === 'admin' || this.role === 'sysadmin') return true;
     // the user is member of a team the chart belongs to
-    return this.hasTeam(chart.organization_id);
+    return this.hasActivatedTeam(chart.organization_id);
+};
+
+User.prototype.hasActivatedTeam = async function(teamId) {
+    const UserTeam = require('./UserTeam');
+
+    const team = await UserTeam.findOne({
+        where: {
+            user_id: this.id,
+            organization_id: teamId
+        }
+    });
+
+    if (!team) return false;
+    if (team.invite_token && team.invite_token.length) return false;
+
+    return true;
 };
 
 /*
