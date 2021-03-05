@@ -27,7 +27,7 @@ Folder.hasMany(Folder, { as: 'children', foreignKey: 'parent_id' });
 
 Folder.prototype.isWritableBy = async function(user) {
     if (this.user_id && this.user_id === user.id) return true;
-    if (this.org_id) return user.hasTeam(this.org_id);
+    if (this.org_id) return user.hasActivatedTeam(this.org_id);
     return false;
 };
 
