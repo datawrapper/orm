@@ -251,7 +251,7 @@ User.prototype.getActiveTeam = async function(session) {
     const teams = await this.getTeams();
     if (teams.length < 1) return null;
 
-    let activeTeam = await getUserData(this, 'active_team');
+    let activeTeam = await getUserData(this.id, 'active_team');
 
     if (!activeTeam && session) {
         activeTeam = session.data['dw-user-organization'];
