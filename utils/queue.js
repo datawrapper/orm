@@ -37,7 +37,7 @@ function ensureArray(v) {
 }
 
 function assignJobOpts(job, opts) {
-    const { retry, ...newOpts } = Object.assign(DEFAULT_OPTS, opts, job.opts);
+    const { retry, ...newOpts } = Object.assign({}, DEFAULT_OPTS, opts, job.opts);
     if (retry && !newOpts.attempts && !newOpts.backoff) {
         Object.assign(newOpts, DEFAULT_RETRY_OPTS);
     }
@@ -48,8 +48,6 @@ async function runJobs({ jobs, config: { connection, opts } }) {
     jobs.forEach(job => assignJobOpts(job, opts));
     if (jobs.length === 1) {
         const job = jobs[0];
-        // TODO Remove debug logging
-        console.log('running one job', job); // eslint-disable-line no-console
         const queue = new Queue(job.queueName, { connection });
         return queue.add(job.name, job.data, job.opts);
     }
@@ -57,8 +55,6 @@ async function runJobs({ jobs, config: { connection, opts } }) {
         curr.children = [acc];
         return curr;
     }, jobs[0]);
-    // TODO Remove debug logging
-    console.log('running job flow', flow); // eslint-disable-line no-console
     const flowProducer = new FlowProducer({ connection });
     const jobNode = await flowProducer.add(flow);
     return jobNode.job;
