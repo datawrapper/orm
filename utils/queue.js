@@ -74,6 +74,8 @@ async function waitForJob({ job, config = {}, timeout }) {
 
 module.exports = {
     QUEUE_NAMES,
+    deserialize,
+    ensureArray,
     runJobs,
     waitForJob
 };
