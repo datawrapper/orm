@@ -36,7 +36,7 @@ function ensureArray(v) {
     return [v];
 }
 
-function assignJobOpts({ job, opts }) {
+function assignJobOpts(job, opts) {
     const { retry, ...newOpts } = Object.assign(DEFAULT_OPTS, opts, job.opts);
     if (retry && !newOpts.attempts && !newOpts.backoff) {
         Object.assign(newOpts, DEFAULT_RETRY_OPTS);
@@ -66,7 +66,7 @@ async function runJobs({ jobs, config: { connection, opts } }) {
 
 async function waitForJob({ job, config = {}, timeout }) {
     const { connection } = config;
-    const queueEvents = new QueueEvents(job.queueName, { connection });
+    const queueEvents = new QueueEvents(job.queue.name, { connection });
     const res = await job.waitUntilFinished(queueEvents, timeout);
     const outputs = ensureArray(res).map(deserialize);
     return outputs;
