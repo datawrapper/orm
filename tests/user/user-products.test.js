@@ -11,7 +11,7 @@ test('user 1 has lowest-prio product', async t => {
     const { User } = t.context.models;
     const user = await User.findByPk(1);
     const activeProduct = await user.getActiveProduct();
-    t.is(activeProduct.id, 1);
+    t.is(activeProduct.id, 3);
 });
 
 test('user 2 has product 1 (through team)', async t => {
