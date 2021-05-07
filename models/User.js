@@ -239,7 +239,11 @@ User.prototype.getActiveProduct = async function() {
         return teamProduct;
     }
 
-    return null;
+    const product = await Product.findOne({
+        order: [['priority', 'DESC']]
+    });
+
+    return product || null;
 };
 
 /*
