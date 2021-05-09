@@ -1,6 +1,6 @@
 {
     "name": "@datawrapper/orm",
-    "version": "3.22.3",
+    "version": "3.22.4",
     "description": "A database abstraction layer for Datawrapper",
     "homepage": "https://github.com/datawrapper/orm#readme",
     "license": "MIT",
