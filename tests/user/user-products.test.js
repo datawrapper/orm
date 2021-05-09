@@ -11,7 +11,7 @@ test('user 1 has lowest-prio product', async t => {
     const { User } = t.context.models;
     const user = await User.findByPk(1);
     const activeProduct = await user.getActiveProduct();
-    t.is(activeProduct.id, 3);
+    t.is(activeProduct.id, 1);
 });
 
 test('user 2 has product 1 (through team)', async t => {
@@ -43,7 +43,7 @@ test('user 5 has product 3 (two teams, but one has higher prio)', async t => {
     const user = await User.findByPk(5);
     const activeProduct = await user.getActiveProduct();
     t.truthy(activeProduct);
-    t.is(activeProduct.id, 1);
+    t.is(activeProduct.id, 3);
 });
 
 test.after(t => close);
