@@ -240,7 +240,7 @@ User.prototype.getActiveProduct = async function() {
     }
 
     const product = await Product.findOne({
-        order: [['priority', 'DESC']]
+        order: [['priority', 'ASC']]
     });
 
     return product || null;
