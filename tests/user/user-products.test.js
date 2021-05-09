@@ -43,7 +43,7 @@ test('user 5 has product 3 (two teams, but one has higher prio)', async t => {
     const user = await User.findByPk(5);
     const activeProduct = await user.getActiveProduct();
     t.truthy(activeProduct);
-    t.is(activeProduct.id, 3);
+    t.is(activeProduct.id, 1);
 });
 
 test.after(t => close);
