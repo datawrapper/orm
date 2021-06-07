@@ -25,4 +25,9 @@ ChartPublic.init(
 
 ChartPublic.belongsTo(Chart, { foreignKey: 'id' });
 
+ChartPublic.prototype.getPublicId = Chart.prototype.getPublicId;
+ChartPublic.prototype.isEditableBy = Chart.prototype.isEditableBy;
+ChartPublic.prototype.isPublishableBy = Chart.prototype.isPublishableBy;
+ChartPublic.prototype.getThumbnailHash = Chart.prototype.getThumbnailHash;
+
 module.exports = ChartPublic;
