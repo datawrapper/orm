@@ -18,4 +18,13 @@ test('associated chart exists', async t => {
     t.is(chart.title, 'Test chart');
 });
 
+test('chart has publicId', t => {
+    t.is(typeof t.context.getPublicId, 'function');
+});
+
+test('chart has getThumbnailHash', t => {
+    t.is(typeof t.context.getThumbnailHash, 'function');
+    t.is(typeof t.context.getThumbnailHash(), 'string');
+});
+
 test.after(t => close);
