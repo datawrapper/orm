@@ -6,9 +6,10 @@ const UserTeam = db.define(
     {
         team_role: {
             field: 'organization_role',
-            type: SQ.ENUM('owner', 'admin', 'member'),
+            type: SQ.INTEGER,
+            values: ['owner', 'admin', 'member'],
             allowNull: false,
-            defaultValue: 'member',
+            defaultValue: 2, // member
             get() {
                 const teamRole = this.getDataValue('team_role');
                 return this.rawAttributes.team_role.values[teamRole];
