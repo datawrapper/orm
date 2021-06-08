@@ -3,6 +3,7 @@ const SQ = require('sequelize');
 const { db, chartIdSalt, hashPublishing } = require('../index');
 const Team = require('../models/Team');
 const get = require('lodash/get');
+const pick = require('lodash/pick');
 
 const Chart = db.define(
     'chart',
@@ -41,6 +42,26 @@ const Chart = db.define(
 Chart.belongsTo(Chart, {
     foreignKey: 'forked_from'
 });
+
+Chart.prototype.setDataValuesFromPublicChart = async function() {
+    const { ChartPublic } = require('@datawrapper/orm/models');
+    const publicChart = await ChartPublic.findOne({ where: { id: this.id } });
+    if (!publicChart) {
+        return false;
+    }
+    Object.assign(
+        this.dataValues,
+        pick(publicChart, [
+            'type',
+            'title',
+            'metadata',
+            'external_data',
+            'author_id',
+            'organization_id'
+        ])
+    );
+    return true;
+};
 
 Chart.prototype.getPublicId = async function() {
     if (this.id && chartIdSalt && this.createdAt) {
