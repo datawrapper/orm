@@ -1,23 +1,30 @@
 const test = require('ava');
-const { close, init } = require('./index');
+const { createChart, createUser } = require('./helpers/fixtures');
+const { init } = require('./helpers/orm');
 
 test.before(async t => {
-    await init();
-    const { ChartAccessToken, User } = require('../models');
-    const user = await User.findByPk(1);
-    t.context = { ChartAccessToken, user };
+    t.context.orm = await init();
+
+    t.context.chart = await createChart();
+
+    const { ChartAccessToken } = require('../models');
+    t.context.ChartAccessToken = ChartAccessToken;
+
+    t.context.user = await createUser();
 });
 
+test.after.always(t => t.context.orm.db.close());
+
 test('create a new ChartAccessToken', async t => {
-    const { ChartAccessToken, user } = t.context;
+    const { ChartAccessToken, chart, user } = t.context;
 
     const res = await ChartAccessToken.newToken({
-        chart_id: 'aaaaa'
+        chart_id: chart.id
     });
 
     t.is(typeof res.token, 'string');
     t.is(res.token.length, 32);
-    t.is(res.chart_id, 'aaaaa');
+    t.is(res.chart_id, chart.id);
 
     await ChartAccessToken.destroy({
         where: {
@@ -25,5 +32,3 @@ test('create a new ChartAccessToken', async t => {
         }
     });
 });
-
-test.after(t => close);

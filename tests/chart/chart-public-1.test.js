@@ -1,21 +1,28 @@
 const test = require('ava');
-const { close, init } = require('../index');
+const { createChart } = require('../helpers/fixtures');
+const { init } = require('../helpers/orm');
 
 test.before(async t => {
-    await init();
+    t.context.orm = await init();
+
     const { ChartPublic } = require('../../models');
-    t.context.publicChart = await ChartPublic.findByPk('aaaaa');
+    t.context.chart = await createChart({
+        title: 'Test chart'
+    });
+
+    t.context.publicChart = await ChartPublic.create({
+        id: t.context.chart.id,
+        title: 'Test chart public'
+    });
 });
 
-test('public chart exists', async t => {
-    t.is(t.context.publicChart.id, 'aaaaa');
-});
+test.after.always(t => t.context.orm.db.close());
 
 test('associated chart exists', async t => {
-    const chart = await t.context.publicChart.getChart();
-    t.is(t.context.publicChart.id, chart.id);
-    t.is(t.context.publicChart.title, 'Test chart public');
+    const { publicChart } = t.context;
+    const chart = await publicChart.getChart();
+
+    t.is(publicChart.id, chart.id);
+    t.is(publicChart.title, 'Test chart public');
     t.is(chart.title, 'Test chart');
 });
-
-test.after(t => close);

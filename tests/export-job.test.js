@@ -1,49 +1,33 @@
 const test = require('ava');
-const { close, init } = require('./index');
-
-/**
- * test creates a new dummy ExportJob instance and tests the job.process()
- * and job.logProgress() methods
- */
+const { createChart, createJob, createUser } = require('./helpers/fixtures');
+const { init } = require('./helpers/orm');
 
 test.before(async t => {
-    await init();
-    const { ExportJob } = require('../models');
-    // create new test job
-    const cleanUp = [];
-    t.context = {
-        cleanUp,
-        async createJob() {
-            const job = await ExportJob.create({
-                chart_id: 'aaaaa',
-                user_id: 1,
-                key: 'test-task',
-                created_at: new Date(),
-                status: 'queued',
-                priority: 0,
-                tasks: [{ action: 'sleep', params: { delay: 500 } }]
-            });
-            cleanUp.push(job);
-            return job;
-        }
-    };
+    t.context.orm = await init();
+
+    t.context.chart = await createChart();
+    t.context.user = await createUser();
 });
 
+test.after.always(t => t.context.orm.db.close());
+
 test('task exists', async t => {
-    const job = await t.context.createJob();
+    const { chart, user } = t.context;
+    const job = await createJob({ chart, user });
     t.is(typeof job.tasks, 'object', 'job.tasks is no object');
     t.is(job.tasks.length, 1);
 });
 
 test('process task', async t => {
-    const job = await t.context.createJob();
+    const { chart, user } = t.context;
+    const job = await createJob({ chart, user });
     t.is(typeof job.process, 'function');
     t.is(typeof job.log, 'undefined');
     await job.process();
     t.is(typeof job.log, 'object');
     t.is(job.log.attempts, 1);
-    t.is(job.user_id, 1);
-    t.is(job.chart_id, 'aaaaa');
+    t.is(job.user_id, user.id);
+    t.is(job.chart_id, chart.id);
     // one more process attempt
     await job.process();
     t.is(job.log.attempts, 2);
@@ -57,7 +41,8 @@ test('process task', async t => {
 });
 
 test('log progress', async t => {
-    const job = await t.context.createJob();
+    const { chart, user } = t.context;
+    const job = await createJob({ chart, user });
     t.is(typeof job.logProgress, 'function');
     await job.logProgress({ message: 'foo' });
     await job.reload();
@@ -70,7 +55,8 @@ test('log progress', async t => {
 });
 
 test('process & progress', async t => {
-    const job = await t.context.createJob();
+    const { chart, user } = t.context;
+    const job = await createJob({ chart, user });
     await job.process();
     await job.logProgress({ message: 'foo' });
     await job.reload();
@@ -88,11 +74,4 @@ test('process & progress', async t => {
     await job.reload();
     t.is(job.log.attempts, 2);
     t.is(job.log.progress.length, 2);
-});
-
-test.after(async t => {
-    for (let i = 0; i < t.context.cleanUp.length; i++) {
-        await t.context.cleanUp[i].destroy();
-    }
-    close();
 });

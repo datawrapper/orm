@@ -1,23 +1,37 @@
 const test = require('ava');
-const { close, init } = require('../index');
+const { createChart } = require('../helpers/fixtures');
+const { init } = require('../helpers/orm');
 
 test.before(async t => {
-    await init();
+    t.context.orm = await init();
+
     const { Chart } = require('../../models');
-    t.context = await Chart.findByPk('aaaaa');
+    t.context.chart = await createChart({
+        metadata: {
+            data: {
+                transpose: false
+            },
+            publish: {
+                'embed-width': 600
+            }
+        }
+    });
 });
 
+test.after.always(t => t.context.orm.db.close());
+
 test('metadata is object', t => {
-    t.is(typeof t.context.metadata, 'object');
+    const { chart } = t.context;
+    t.is(typeof chart.metadata, 'object');
 });
 
 test('get metadata properties', t => {
-    t.is(t.context.metadata.data.transpose, false);
-    t.is(t.context.metadata.publish['embed-width'], 600);
+    const { chart } = t.context;
+    t.is(chart.metadata.data.transpose, false);
+    t.is(chart.metadata.publish['embed-width'], 600);
 });
 
 test('chart has publicId', t => {
-    t.is(typeof t.context.getPublicId, 'function');
+    const { chart } = t.context;
+    t.is(typeof chart.getPublicId, 'function');
 });
-
-test.after(t => close);

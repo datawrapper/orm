@@ -1,15 +1,20 @@
 const test = require('ava');
-const { close, init } = require('./index');
+const { createPlugin } = require('./helpers/fixtures');
+const { init } = require('./helpers/orm');
 
 test.before(async t => {
-    await init();
+    t.context.orm = await init();
+
     const { PluginData, Plugin } = require('../models');
-    const plugin = await Plugin.findByPk('hello-world');
-    t.context = { PluginData, Plugin, plugin };
+    t.context.PluginData = PluginData;
+
+    t.context.plugin = await createPlugin();
 });
 
+test.after.always(t => t.context.orm.db.close());
+
 test('create a new ChartAccessToken', async t => {
-    const { PluginData, Plugin, plugin } = t.context;
+    const { PluginData, plugin } = t.context;
 
     const res = await PluginData.create({
         plugin_id: plugin.id,
@@ -44,5 +49,3 @@ test('create a new ChartAccessToken', async t => {
         }
     });
 });
-
-test.after(t => close);

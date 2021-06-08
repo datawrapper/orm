@@ -1,28 +1,70 @@
 const test = require('ava');
-const { close, init } = require('../index');
+const { createTheme } = require('../helpers/fixtures');
+const { init } = require('../helpers/orm');
 
 test.before(async t => {
-    await init();
-    const { Theme } = require('../../models');
-    t.context = await Theme.findByPk('datawrapper-blog');
+    t.context.orm = await init();
+
+    const grandparentTheme = await createTheme({
+        data: {
+            easing: 'easeInOut'
+        }
+    });
+    const parentTheme = await createTheme({
+        data: {
+            colors: {
+                general: {
+                    padding: 0
+                },
+                palette: ['one-item']
+            }
+        },
+        assets: {
+            Helvetica: 'helvetica'
+        },
+        extend: grandparentTheme.id
+    });
+    const theme = await createTheme({
+        data: {
+            colors: {
+                general: {
+                    background: '#f9f9f9'
+                },
+                palette: ['two', 'items']
+            },
+            typography: {
+                chart: {
+                    fontSize: 13
+                }
+            }
+        },
+        assets: {
+            Roboto: 'roboto'
+        },
+        extend: parentTheme.id
+    });
+
+    t.context.theme = theme;
 });
 
+test.after.always(t => t.context.orm.db.close());
+
 test('get theme.data', t => {
-    const data = t.context.data;
+    const { data } = t.context.theme;
     t.is(typeof data, 'object');
     t.is(data.colors.general.background, '#f9f9f9');
 });
 
 test('get theme.assets', async t => {
     const { Theme } = require('../../models');
-    const theme = await Theme.findByPk('datawrapper');
+    const theme = await Theme.findByPk(t.context.theme.id);
     t.is(typeof theme.assets, 'object');
     t.truthy(theme.assets.Roboto);
     t.falsy(theme.assets.Helvetica);
 });
 
 test('set theme.data', async t => {
-    const theme = t.context;
+    const { theme } = t.context;
     const data = theme.data;
     // font size in db is 13
     t.is(theme.data.typography.chart.fontSize, 13);
@@ -48,8 +90,9 @@ test('set theme.data', async t => {
 });
 
 test('theme.getMergedData', async t => {
-    t.is(typeof t.context.getMergedData, 'function', 'theme.getMergedData() is undefined');
-    const data = await t.context.getMergedData();
+    const { theme } = t.context;
+    t.is(typeof theme.getMergedData, 'function', 'theme.getMergedData() is undefined');
+    const data = await theme.getMergedData();
     t.is(typeof data, 'object');
     // check a property coming from the theme itself
     t.is(data.colors.general.background, '#f9f9f9');
@@ -60,12 +103,11 @@ test('theme.getMergedData', async t => {
 });
 
 test('theme.getMergedAssets', async t => {
-    t.is(typeof t.context.getMergedAssets, 'function', 'theme.getMergedAssets() is undefined');
-    const assets = await t.context.getMergedAssets();
+    const { theme } = t.context;
+    t.is(typeof theme.getMergedAssets, 'function', 'theme.getMergedAssets() is undefined');
+    const assets = await theme.getMergedAssets();
     t.is(typeof assets, 'object');
     // check a property coming from the theme itself
     t.truthy(assets.Roboto);
     t.truthy(assets.Helvetica);
 });
-
-test.after(t => close);

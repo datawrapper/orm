@@ -1,32 +1,40 @@
 const test = require('ava');
-const { close, init } = require('./index');
+const { createUser } = require('./helpers/fixtures');
+const { init } = require('./helpers/orm');
 
 test.before(async t => {
-    await init();
-    const { Action, User } = require('../models');
+    t.context.orm = await init();
+
+    const { Action } = require('../models');
+    t.context.Action = Action;
+
     const { logAction } = require('../utils/action');
-    const user = await User.findByPk(1);
-    t.context = { Action, logAction, user };
+    t.context.logAction = logAction;
+
+    t.context.user1 = await createUser();
+    t.context.user2 = await createUser();
 });
 
-test('log a new action', async t => {
-    const { logAction, Action, user } = t.context;
+test.after.always(t => t.context.orm.db.close());
 
-    let res = await logAction(user.id, 'orm-test/run');
+test('log a new action', async t => {
+    const { logAction, Action, user1, user2 } = t.context;
+
+    let res = await logAction(user1.id, 'orm-test/run');
     t.is(res.key, 'orm-test/run');
 
-    res = await logAction(user.id, 'orm-test/run', 123);
+    res = await logAction(user1.id, 'orm-test/run', 123);
     t.is(res.details, 123);
-    t.is(res.user_id, user.id);
+    t.is(res.user_id, user1.id);
 
-    res = await logAction(2, 'orm-test/run', 'a string');
+    res = await logAction(user2.id, 'orm-test/run', 'a string');
     t.is(res.details, 'a string');
-    t.is(res.user_id, 2);
+    t.is(res.user_id, user2.id);
 
-    res = await logAction(user.id, 'orm-test/run', true);
+    res = await logAction(user1.id, 'orm-test/run', true);
     t.is(res.details, 'true');
 
-    res = await logAction(user.id, 'orm-test/run', { foo: 'bar' });
+    res = await logAction(user1.id, 'orm-test/run', { foo: 'bar' });
     t.is(res.details, '{"foo":"bar"}');
 
     await Action.destroy({
@@ -37,10 +45,10 @@ test('log a new action', async t => {
 });
 
 test('check if action was actually stored', async t => {
-    const { logAction, Action, user } = t.context;
+    const { logAction, Action, user1 } = t.context;
 
     const random = `xyz-${Math.random()}`;
-    await logAction(user.id, 'orm-test/another', random);
+    await logAction(user1.id, 'orm-test/another', random);
     // load action from db
     const action = await Action.findOne({
         where: {
@@ -71,5 +79,3 @@ test('log action without user id', async t => {
     t.is(action.key, 'orm-test/no-user');
     await action.destroy();
 });
-
-test.after(t => close);

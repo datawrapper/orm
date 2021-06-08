@@ -1,49 +1,31 @@
 const test = require('ava');
-const { close, init } = require('../index');
+const { init } = require('../helpers/orm');
 
-test.beforeEach(async t => {
-    t.context.ORM = await init();
+test.before(async t => {
+    t.context.orm = await init();
 });
 
-test.serial('"orm-test" plugin registration', async t => {
-    const { plugins } = t.context.ORM;
+test.after.always(t => t.context.orm.db.close());
 
-    t.truthy(plugins['orm-test']);
-    t.log('"orm-test" is available');
+test('"orm-test" plugin registration', async t => {
+    const { orm } = t.context;
 
-    const TestPlugin = require(plugins['orm-test'].requirePath);
-    const ORMTest = await TestPlugin.register(t.context.ORM);
+    // Test that "orm-test" is available.
+    t.truthy(orm.plugins['orm-test']);
 
-    t.is(t.context.ORM.db.models.orm_test, ORMTest);
-    t.log('"orm-test" is registered');
+    const TestPlugin = require(orm.plugins['orm-test'].requirePath);
+    const ORMTest = await TestPlugin.register(orm);
+
+    // Test that '"orm-test" is registered.
+    t.is(orm.db.models.orm_test, ORMTest);
 
     const row = await ORMTest.create({ data: 'Test' });
 
+    // Test that "orm-test" can write data.
     t.truthy(row.id);
     t.is(row.data, 'Test');
-    t.log('"orm-test" can write data');
 
-    await row.destroy();
-    await ORMTest.drop();
-    t.log('"orm-test" removed');
-});
-
-test.serial('ORM.registerPlugins registers all plugins', async t => {
-    const { registerPlugins, plugins } = t.context.ORM;
-    await registerPlugins();
-
-    t.is(typeof t.context.ORM.db.models.orm_test, 'function');
-    t.is(Object.keys(plugins).length, Object.keys(t.context.ORM.db.models).length);
-
-    const ORMTest = t.context.ORM.db.models.orm_test;
-
-    const row = await ORMTest.create({ data: 'Test-2' });
-
-    t.truthy(row.id);
-    t.is(row.data, 'Test-2');
-
+    // Remove "orm-test".
     await row.destroy();
     await ORMTest.drop();
 });
-
-test.after(t => close);
