@@ -1,6 +1,6 @@
 {
     "name": "@datawrapper/orm",
-    "version": "3.22.4",
+    "version": "3.23.0",
     "description": "A database abstraction layer for Datawrapper",
     "homepage": "https://github.com/datawrapper/orm#readme",
     "license": "MIT",
@@ -25,9 +25,9 @@
         "assign-deep": "^1.0.1",
         "lodash": "^4.17.20",
         "merge-deep": "^3.0.2",
-        "mysql2": "1.7.0",
+        "mysql2": "^2.2.5",
         "nanoid": "2.1.6",
-        "sequelize": "6.0.0-beta.4",
+        "sequelize": "^6.6.2",
         "underscore": "1.9.1"
     },
     "devDependencies": {
