@@ -13,22 +13,30 @@ test.before(async t => {
     t.context.user = await createUser();
 });
 
-test.after.always(t => t.context.orm.db.close());
+test.after.always(async t => {
+    if (t.context.user) {
+        await t.context.user.destroy({ force: true });
+    }
+    if (t.context.chart) {
+        await t.context.chart.destroy({ force: true });
+    }
+    await t.context.orm.db.close();
+});
 
 test('create a new ChartAccessToken', async t => {
     const { ChartAccessToken, chart, user } = t.context;
+    let res;
+    try {
+        res = await ChartAccessToken.newToken({
+            chart_id: chart.id
+        });
 
-    const res = await ChartAccessToken.newToken({
-        chart_id: chart.id
-    });
-
-    t.is(typeof res.token, 'string');
-    t.is(res.token.length, 32);
-    t.is(res.chart_id, chart.id);
-
-    await ChartAccessToken.destroy({
-        where: {
-            token: res.token
+        t.is(typeof res.token, 'string');
+        t.is(res.token.length, 32);
+        t.is(res.chart_id, chart.id);
+    } finally {
+        if (res && res.token) {
+            await ChartAccessToken.destroy({ where: { token: res.token } });
         }
-    });
+    }
 });

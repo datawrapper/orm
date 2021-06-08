@@ -1,11 +1,11 @@
 const test = require('ava');
-const { createChart } = require('../helpers/fixtures');
-const { init } = require('../helpers/orm');
+const { createChart } = require('./helpers/fixtures');
+const { init } = require('./helpers/orm');
 
 test.before(async t => {
     t.context.orm = await init();
 
-    const { Chart } = require('../../models');
+    const { Chart } = require('../models');
     t.context.chart = await createChart({
         metadata: {
             data: {
@@ -18,7 +18,12 @@ test.before(async t => {
     });
 });
 
-test.after.always(t => t.context.orm.db.close());
+test.after.always(async t => {
+    if (t.context.chart) {
+        await t.context.chart.destroy({ force: true });
+    }
+    await t.context.orm.db.close();
+});
 
 test('metadata is object', t => {
     const { chart } = t.context;

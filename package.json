@@ -15,8 +15,10 @@
     "scripts": {
         "format": "prettier 'models/**/*.js' --write",
         "lint": "prettier --check 'models/**/*.{js,html}' && healthier 'models/**/*.{js,html}'",
-        "test": "DW_CONFIG_PATH=tests/config._test.js ava --verbose",
-        "test:docker": "DW_CONFIG_PATH=tests/config.docker.js ava --verbose"
+        "test": "DW_CONFIG_PATH=tests/config.docker.js ava --verbose",
+        "test:setup": "DW_CONFIG_PATH=tests/config.docker.js node scripts/sync-db.js",
+        "test:local": "DW_CONFIG_PATH=tests/config.local.js ava --verbose",
+        "test:ci": "DW_CONFIG_PATH=tests/config.ci.js ava --verbose"
     },
     "repository": {
         "type": "git",

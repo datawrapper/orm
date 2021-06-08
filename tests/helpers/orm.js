@@ -3,16 +3,17 @@ const { requireConfig } = require('@datawrapper/shared/node/findConfig');
 
 const config = requireConfig();
 
-async function init() {
-    const orm = await ORM.init(config);
-    const { db } = ORM;
+function init() {
+    return ORM.init(config);
+}
 
+async function sync() {
+    const { db } = await init();
     require('../../models');
     await db.sync();
-
-    return orm;
 }
 
 module.exports = {
-    init
+    init,
+    sync
 };

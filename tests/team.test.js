@@ -7,12 +7,21 @@ test.before(async t => {
 
     t.context.team = await createTeam();
 
-    for (var i = 0; i < 3; i++) {
-        await createUser({ team: t.context.team });
-    }
+    const promises = Array(3)
+        .fill()
+        .map(() => createUser({ teams: [t.context.team] }));
+    t.context.users = await Promise.all(promises);
 });
 
-test.after.always(t => t.context.orm.db.close());
+test.after.always(async t => {
+    if (t.context.users) {
+        await Promise.all(t.context.users.map(user => user.destroy()));
+    }
+    if (t.context.team) {
+        await t.context.team.destroy({ force: true });
+    }
+    await t.context.orm.db.close();
+});
 
 test('team.getUsers returns three users', async t => {
     const { team } = t.context;

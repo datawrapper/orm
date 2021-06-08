@@ -1,11 +1,11 @@
 const test = require('ava');
-const { createChart } = require('../helpers/fixtures');
-const { init } = require('../helpers/orm');
+const { createChart } = require('./helpers/fixtures');
+const { init } = require('./helpers/orm');
 
 test.before(async t => {
     t.context.orm = await init();
 
-    const { ChartPublic } = require('../../models');
+    const { ChartPublic } = require('../models');
     t.context.chart = await createChart({
         title: 'Test chart'
     });
@@ -16,7 +16,15 @@ test.before(async t => {
     });
 });
 
-test.after.always(t => t.context.orm.db.close());
+test.after.always(async t => {
+    if (t.context.publicChart) {
+        await t.context.publicChart.destroy({ force: true });
+    }
+    if (t.context.chart) {
+        await t.context.chart.destroy({ force: true });
+    }
+    await t.context.orm.db.close();
+});
 
 test('associated chart exists', async t => {
     const { publicChart } = t.context;
