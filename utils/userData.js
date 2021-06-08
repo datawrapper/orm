@@ -23,7 +23,7 @@ module.exports.getUserData = async function(userId, key, _default = undefined) {
  */
 module.exports.setUserData = async function(userId, key, value) {
     return ORM.db.query(
-        'INSERT INTO user_data(user_id, `key`, value) VALUES (:userId, :key, :value) ON DUPLICATE KEY UPDATE value = :value, stored_at = CURRENT_TIMESTAMP',
+        'INSERT INTO user_data(user_id, `key`, value, stored_at) VALUES (:userId, :key, :value, CURRENT_TIMESTAMP) ON DUPLICATE KEY UPDATE value = :value, stored_at = CURRENT_TIMESTAMP',
         { replacements: { userId, key, value } }
     );
 };
