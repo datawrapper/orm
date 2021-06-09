@@ -43,23 +43,22 @@ Chart.belongsTo(Chart, {
     foreignKey: 'forked_from'
 });
 
-Chart.prototype.setDataValuesFromPublicChart = async function() {
-    const { ChartPublic } = require('@datawrapper/orm/models');
+Chart.prototype.setAttributesFromPublicChart = async function() {
+    const { ChartPublic } = require('../models');
     const publicChart = await ChartPublic.findOne({ where: { id: this.id } });
     if (!publicChart) {
         return false;
     }
-    Object.assign(
-        this.dataValues,
-        pick(publicChart, [
-            'type',
-            'title',
-            'metadata',
-            'external_data',
-            'author_id',
-            'organization_id'
-        ])
-    );
+    for (const attr of [
+        'type',
+        'title',
+        'metadata',
+        'external_data',
+        'author_id',
+        'organization_id'
+    ]) {
+        this.set(attr, publicChart[attr]);
+    }
     return true;
 };
 
