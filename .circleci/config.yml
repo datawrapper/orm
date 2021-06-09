@@ -38,7 +38,7 @@ jobs:
                   name: Run tests
                   command: |
                       mkdir -p ~/reports/ava
-                      npx ava --tap | npx tap-xunit > ~/reports/ava/results.xml
+                      npx ava --tap | tee /dev/stderr | npx tap-xunit > ~/reports/ava/results.xml
             - store_test_results:
                   path: ~/reports
             - store_artifacts:
