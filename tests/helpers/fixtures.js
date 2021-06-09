@@ -99,6 +99,12 @@ function createJob({ chart, user }) {
     });
 }
 
+async function destroyTeam(team) {
+    const { TeamProduct } = require('../../models');
+    await TeamProduct.destroy({ where: { organization_id: team.id }, force: true });
+    await team.destroy({ force: true });
+}
+
 async function destroyUser(user) {
     const { UserProduct } = require('../../models');
     await UserProduct.destroy({ where: { user_id: user.id }, force: true });
@@ -108,13 +114,15 @@ async function destroyUser(user) {
 }
 
 async function destroy(...instances) {
-    const { User } = require('../../models');
+    const { Team, User } = require('../../models');
     for (const instance of instances) {
         if (!instance) {
             continue;
         }
         if (Array.isArray(instance)) {
             await destroy(...instance);
+        } else if (instance instanceof Team) {
+            await destroyTeam(instance);
         } else if (instance instanceof User) {
             await destroyUser(instance);
         } else {
