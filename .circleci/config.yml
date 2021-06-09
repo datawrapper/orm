@@ -38,11 +38,13 @@ jobs:
                   name: Run tests
                   command: |
                       mkdir -p ~/reports/ava
-                      npx ava --tap | tee /dev/stderr | npx tap-xunit > ~/reports/ava/results.xml
+                      npx nyc --reporter=html --report-dir=$HOME/coverage ava --tap | tee /dev/stderr | npx tap-xunit > ~/reports/ava/results.xml
             - store_test_results:
                   path: ~/reports
             - store_artifacts:
                   path: ~/reports
+            - store_artifacts:
+                  path: ~/coverage
 
             - save_cache:
                   key: v4-install-cache-{{ checksum "package-lock.json" }}
