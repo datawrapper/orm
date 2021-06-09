@@ -1,5 +1,5 @@
 const test = require('ava');
-const { createTheme } = require('./helpers/fixtures');
+const { createTheme, destroy } = require('./helpers/fixtures');
 const { findWhere } = require('underscore');
 const { init } = require('./helpers/orm');
 
@@ -54,18 +54,12 @@ test.before(async t => {
 });
 
 test.after.always(async t => {
-    if (t.context.theme2) {
-        await t.context.theme2.destroy({ force: true });
-    }
-    if (t.context.theme1) {
-        await t.context.theme1.destroy({ force: true });
-    }
-    if (t.context.parentTheme) {
-        await t.context.parentTheme.destroy({ force: true });
-    }
-    if (t.context.grandparentTheme) {
-        await t.context.grandparentTheme.destroy({ force: true });
-    }
+    await destroy(
+        t.context.theme2,
+        t.context.theme1,
+        t.context.parentTheme,
+        t.context.grandparentTheme
+    );
     await t.context.orm.db.close();
 });
 

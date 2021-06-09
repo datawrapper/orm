@@ -1,5 +1,5 @@
 const test = require('ava');
-const { createPlugin } = require('./helpers/fixtures');
+const { createPlugin, destroy } = require('./helpers/fixtures');
 const { init } = require('./helpers/orm');
 
 test.before(async t => {
@@ -12,9 +12,7 @@ test.before(async t => {
 });
 
 test.after.always(async t => {
-    if (t.context.plugin) {
-        await t.context.plugin.destroy({ force: true });
-    }
+    await destroy(t.context.plugin);
     await t.context.orm.db.close();
 });
 

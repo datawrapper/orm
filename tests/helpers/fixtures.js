@@ -99,6 +99,29 @@ function createJob({ chart, user }) {
     });
 }
 
+async function destroyUser(user) {
+    const { UserProduct } = require('../../models');
+    await UserProduct.destroy({ where: { user_id: user.id }, force: true });
+    const { UserTeam } = require('../../models');
+    await UserTeam.destroy({ where: { user_id: user.id }, force: true });
+    await user.destroy({ force: true });
+}
+
+async function destroy(...objects) {
+    for (const object of objects) {
+        if (!object) {
+            continue;
+        }
+        if (Array.isArray(object)) {
+            await destroy(...object);
+        } else if (object._modelOptions.tableName === 'user') {
+            await destroyUser(object);
+        } else {
+            await object.destroy({ force: true });
+        }
+    }
+}
+
 module.exports = {
     createChart,
     createJob,
@@ -106,5 +129,6 @@ module.exports = {
     createProduct,
     createTeam,
     createTheme,
-    createUser
+    createUser,
+    destroy
 };

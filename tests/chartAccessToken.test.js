@@ -1,5 +1,5 @@
 const test = require('ava');
-const { createChart, createUser } = require('./helpers/fixtures');
+const { createChart, createUser, destroy } = require('./helpers/fixtures');
 const { init } = require('./helpers/orm');
 
 test.before(async t => {
@@ -14,12 +14,7 @@ test.before(async t => {
 });
 
 test.after.always(async t => {
-    if (t.context.user) {
-        await t.context.user.destroy({ force: true });
-    }
-    if (t.context.chart) {
-        await t.context.chart.destroy({ force: true });
-    }
+    await destroy(t.context.user, t.context.chart);
     await t.context.orm.db.close();
 });
 

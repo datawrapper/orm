@@ -4,7 +4,8 @@ const {
     createPlugin,
     createProduct,
     createTeam,
-    createUser
+    createUser,
+    destroy
 } = require('./helpers/fixtures');
 const { init } = require('./helpers/orm');
 
@@ -87,57 +88,25 @@ test.before(async t => {
 });
 
 test.after.always(async t => {
-    if (t.context.userPluginCache) {
-        await t.context.userPluginCache.destroy({ force: true });
-    }
-    if (t.context.privatePluginCached) {
-        await t.context.privatePluginCached.destroy({ force: true });
-    }
-    if (t.context.privatePlugin) {
-        await t.context.privatePlugin.destroy({ force: true });
-    }
-    if (t.context.disabledPlugin) {
-        await t.context.disabledPlugin.destroy({ force: true });
-    }
-    if (t.context.publicPlugin) {
-        await t.context.publicPlugin.destroy({ force: true });
-    }
-    if (t.context.productUserCharts) {
-        await Promise.all(t.context.productUserCharts.map(chart => chart.destroy({ force: true })));
-    }
-    if (t.context.productUser) {
-        await t.context.productUser.destroy({ force: true });
-    }
-    if (t.context.pendingUser) {
-        await t.context.pendingUser.destroy({ force: true });
-    }
-    if (t.context.teamUserChart) {
-        await t.context.teamUserChart.destroy({ force: true });
-    }
-    if (t.context.teamUser) {
-        await t.context.teamUser.destroy({ force: true });
-    }
-    if (t.context.adminUser) {
-        await t.context.adminUser.destroy({ force: true });
-    }
-    if (t.context.team2) {
-        await t.context.team2.destroy({ force: true });
-    }
-    if (t.context.team1) {
-        await t.context.team1.destroy({ force: true });
-    }
-    if (t.context.userProduct) {
-        await t.context.userProduct.destroy({ force: true });
-    }
-    if (t.context.teamProductHightPrio) {
-        await t.context.teamProductHightPrio.destroy({ force: true });
-    }
-    if (t.context.teamProduct) {
-        await t.context.teamProduct.destroy({ force: true });
-    }
-    if (t.context.defaultProduct) {
-        await t.context.defaultProduct.destroy({ force: true });
-    }
+    await destroy(
+        t.context.userPluginCache,
+        t.context.privatePluginCached,
+        t.context.privatePlugin,
+        t.context.disabledPlugin,
+        t.context.publicPlugin,
+        t.context.productUserCharts,
+        t.context.productUser,
+        t.context.pendingUser,
+        t.context.teamUserChart,
+        t.context.teamUser,
+        t.context.adminUser,
+        t.context.team2,
+        t.context.team1,
+        t.context.userProduct,
+        t.context.teamProductHightPrio,
+        t.context.teamProduct,
+        t.context.defaultProduct
+    );
     await t.context.orm.db.close();
 });
 
