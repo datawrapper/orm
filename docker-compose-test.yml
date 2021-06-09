@@ -2,8 +2,8 @@ version: "3.9"
 services:
   mysql:
     image: "mysql/mysql-server:5.7"
-    ports:
-      - "3306:3306"
+    expose:
+      - "3306"
     environment:
       - MYSQL_USER=test
       - MYSQL_PASSWORD=test
@@ -14,3 +14,6 @@ services:
       - mysql
     volumes:
       - ".:/app"
+networks:
+  default:
+    driver: overlay
