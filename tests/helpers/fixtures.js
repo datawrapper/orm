@@ -107,17 +107,18 @@ async function destroyUser(user) {
     await user.destroy({ force: true });
 }
 
-async function destroy(...objects) {
-    for (const object of objects) {
-        if (!object) {
+async function destroy(...instances) {
+    const { User } = require('../../models');
+    for (const instance of instances) {
+        if (!instance) {
             continue;
         }
-        if (Array.isArray(object)) {
-            await destroy(...object);
-        } else if (object._modelOptions.tableName === 'user') {
-            await destroyUser(object);
+        if (Array.isArray(instance)) {
+            await destroy(...instance);
+        } else if (instance instanceof User) {
+            await destroyUser(instance);
         } else {
-            await object.destroy({ force: true });
+            await instance.destroy({ force: true });
         }
     }
 }
