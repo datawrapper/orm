@@ -1,17 +1,21 @@
+export DW_CONFIG_PATH ?= tests/config.docker.js
 m ?= *
+
 docker_compose := docker-compose -f docker-compose-test.yml
 
 .PHONY: test
-test:  ## Run unit tests
-	$(docker_compose) run --rm node sh -c 'cd /app && npm test -- -m "$(m)"'
-
-.PHONY: test-setup
-test-setup:  ## Start testing database and create tables
-	$(docker_compose) run --rm node sh -c 'cd /app && scripts/wait-for-db.sh && npm run test:setup'
+test:  ## Run unit tests (create the testing database if it isn't running)
+	[[ -n $$($(docker_compose) ps --services --filter status=running mysql) ]] || \
+		$(MAKE) test-shell cmd='cd /app && script/wait-for-db.sh && node script/sync-db.js'
+	$(MAKE) test-shell cmd='cd /app && npm test -- -m "$(m)"'
 
 .PHONY: test-teardown
-test-teardown:  ## Stop and remove testing database
+test-teardown:  ## Stop and remove the testing database
 	$(docker_compose) down
+
+.PHONY: test-shell
+test-shell:  ## Run command specified by the variable 'cmd' in a shell in the testing node container
+	$(docker_compose) run --rm -e "DW_CONFIG_PATH=$(DW_CONFIG_PATH)" node sh -c '$(cmd)'
 
 .PHONY: help
 help:

@@ -87,25 +87,27 @@ await ORM.registerPlugins()
 
 #### Unit tests
 
-1. Start a small Docker stack in which the unit tests will run (because they require a MySQL
-   database):
+To run the unit tests, run:
 
-    ``` shell
-    make test-setup
-    ```
+``` shell
+make test
+```
 
-2. Run the unit tests:
+or to run only some tests:
 
-    ``` shell
-    make test
-    ```
+``` shell
+make test m='chart has*'
+```
 
-    You can run `make test` repeatedly without always running `make test-setup`. `make test-setup`
-    is only required when the testing database is empty or when you change its schema.
+This will start a Docker container with a testing database, create tables in it, and run the unit
+tests in another container.
 
-3. After you're done with testing, you can stop the testing Docker stack and delete the testing
-   database:
+The database container will keep running after the tests finish, so you can run `make test`
+repeatedly and it will save some time by reusing the database and its tables.
 
-    ``` shell
-    make test-teardown
-    ```
+When you're done developing the unit tests, or when you change database schema, you can stop the
+database Docker container and delete the database using:
+
+``` shell
+make test-teardown
+```
