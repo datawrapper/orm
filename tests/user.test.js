@@ -259,7 +259,10 @@ test('pending user has is not activated', t => {
 test('user.getActiveProduct returns default product', async t => {
     const { defaultProduct, adminUser } = t.context;
     const activeProduct = await adminUser.getActiveProduct();
-    t.is(activeProduct.id, defaultProduct.id);
+    // Check priority instead of id, because it can happen that an external testing database is
+    // dirty and contains several products with low priority, in which case the default product will
+    // be chosen randomly and might not be out 'defaultProduct'.
+    t.is(activeProduct.priority, defaultProduct.priority);
 });
 
 test('user.getActiveProduct returns team product', async t => {
