@@ -3,7 +3,6 @@ const SQ = require('sequelize');
 const { db, chartIdSalt, hashPublishing } = require('../index');
 const Team = require('../models/Team');
 const get = require('lodash/get');
-const pick = require('lodash/pick');
 
 const Chart = db.define(
     'chart',
