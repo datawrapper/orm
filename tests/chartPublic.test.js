@@ -69,7 +69,9 @@ test('ReadonlyChart.fromChart builds a new chart instance with values from passe
     const readonlyChart = await ReadonlyChart.fromChart(chart);
 
     t.true(readonlyChart instanceof ReadonlyChart);
+    t.truthy(readonlyChart.createdAt);
     t.is(readonlyChart.id, chart.id);
+    t.is(await readonlyChart.getPublicId(), chart.id);
     t.is(readonlyChart.type, chart.type);
     t.is(readonlyChart.title, chart.title);
     t.is(readonlyChart.theme, chart.theme);
@@ -96,8 +98,10 @@ test('ReadonlyChart.fromPublicChart builds a new chart instance with values from
     const readonlyChart = await ReadonlyChart.fromPublicChart(publicChart);
 
     t.true(readonlyChart instanceof ReadonlyChart);
+    t.truthy(readonlyChart.createdAt);
     // Chart attributes
     t.is(readonlyChart.id, chart.id);
+    t.is(await readonlyChart.getPublicId(), chart.id);
     t.is(readonlyChart.theme, chart.theme);
     t.is(readonlyChart.guest_session, chart.guest_session);
     t.is(readonlyChart.last_edit_step, chart.last_edit_step);
