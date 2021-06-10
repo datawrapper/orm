@@ -64,7 +64,7 @@ test('associated chart exists', async t => {
 });
 
 test('ReadonlyChart.fromChart builds a new chart instance with values from passed chart', async t => {
-    const { ReadonlyChart } = require('../models');
+    const ReadonlyChart = require('../models/ReadonlyChart');
     const { chart, chartTeam, chartUser } = t.context;
     const readonlyChart = await ReadonlyChart.fromChart(chart);
 
@@ -93,7 +93,7 @@ test('ReadonlyChart.fromChart builds a new chart instance with values from passe
 });
 
 test('ReadonlyChart.fromPublicChart builds a new chart instance with values from passed public chart', async t => {
-    const { ReadonlyChart } = require('../models');
+    const ReadonlyChart = require('../models/ReadonlyChart');
     const { chart, publicChart, publicChartTeam, publicChartUser } = t.context;
     const readonlyChart = await ReadonlyChart.fromPublicChart(publicChart);
 
@@ -125,7 +125,7 @@ test('ReadonlyChart.fromPublicChart builds a new chart instance with values from
 });
 
 test('ReadonlyChart cannot be saved', async t => {
-    const { ReadonlyChart } = require('../models');
+    const ReadonlyChart = require('../models/ReadonlyChart');
     const { chart } = t.context;
     const readonlyChart = await ReadonlyChart.fromChart(chart);
 
