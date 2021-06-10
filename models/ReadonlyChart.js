@@ -17,12 +17,8 @@ ReadonlyChart.init(chartAttributes, {
     }
 });
 
-ReadonlyChart.belongsTo(Chart, {
-    foreignKey: 'forked_from'
-});
-
+ReadonlyChart.belongsTo(Chart, { foreignKey: 'forked_from' });
 ReadonlyChart.belongsTo(Team, { foreignKey: 'organization_id' });
-
 ReadonlyChart.belongsTo(User, { foreignKey: 'author_id' });
 
 ReadonlyChart.fromChart = function(chart) {
