@@ -1,4 +1,5 @@
 const test = require('ava');
+const { ValidationError } = require('sequelize');
 const { createChart, createTeam, createUser, destroy } = require('./helpers/fixtures');
 const { init } = require('./helpers/orm');
 
@@ -12,10 +13,22 @@ test.before(async t => {
     t.context.chart = await createChart({
         type: 'd3-bars',
         title: 'Test chart',
+        theme: 'chart theme',
+        guest_session: null,
+        last_edit_step: null,
+        published_at: null,
+        public_url: null,
+        public_version: null,
+        deleted: null,
+        deleted_at: null,
+        forkable: null,
+        is_fork: null,
         metadata: {
             foo: 'chart metadata'
         },
+        language: null,
         external_data: 'chart external data',
+        utf8: null,
         author_id: t.context.chartUser.id,
         organization_id: t.context.chartTeam.id
     });
@@ -26,6 +39,7 @@ test.before(async t => {
         id: t.context.chart.id,
         type: 'd3-lines',
         title: 'Test chart public',
+        theme: 'public chart theme',
         metadata: {
             bar: 'public chart metadata'
         },
@@ -49,16 +63,72 @@ test('associated chart exists', async t => {
     t.is(chart.title, 'Test chart');
 });
 
-test('chart.setAttributesFromPublicChart copies attributes from associated public chart', async t => {
-    const { chart, publicChart, publicChartTeam, publicChartUser } = t.context;
-    const newChart = await publicChart.getChart();
-    await newChart.setAttributesFromPublicChart();
+test('ReadonlyChart.fromChart builds a new chart instance with values from passed chart', async t => {
+    const { ReadonlyChart } = require('../models');
+    const { chart, chartTeam, chartUser } = t.context;
+    const readonlyChart = await ReadonlyChart.fromChart(chart);
 
-    t.is(newChart.id, chart.id);
-    t.is(newChart.type, publicChart.type);
-    t.is(newChart.title, publicChart.title);
-    t.deepEqual(newChart.metadata, publicChart.metadata);
-    t.is(newChart.external_data, publicChart.external_data);
-    t.is((await newChart.getUser()).id, publicChartUser.id);
-    t.is((await newChart.getTeam()).id, publicChartTeam.id);
+    t.true(readonlyChart instanceof ReadonlyChart);
+    t.is(readonlyChart.id, chart.id);
+    t.is(readonlyChart.type, chart.type);
+    t.is(readonlyChart.title, chart.title);
+    t.is(readonlyChart.theme, chart.theme);
+    t.is(readonlyChart.guest_session, chart.guest_session);
+    t.is(readonlyChart.last_edit_step, chart.last_edit_step);
+    t.is(readonlyChart.published_at, chart.published_at);
+    t.is(readonlyChart.public_url, chart.public_url);
+    t.is(readonlyChart.public_version, chart.public_version);
+    t.is(readonlyChart.deleted, chart.deleted);
+    t.is(readonlyChart.deleted_at, chart.deleted_at);
+    t.is(readonlyChart.forkable, chart.forkable);
+    t.is(readonlyChart.is_fork, chart.is_fork);
+    t.deepEqual(readonlyChart.metadata, chart.metadata);
+    t.is(readonlyChart.language, chart.language);
+    t.is(readonlyChart.external_data, chart.external_data);
+    t.is(readonlyChart.utf8, chart.utf8);
+    t.is((await readonlyChart.getUser()).id, chartUser.id);
+    t.is((await readonlyChart.getTeam()).id, chartTeam.id);
+});
+
+test('ReadonlyChart.fromPublicChart builds a new chart instance with values from passed public chart', async t => {
+    const { ReadonlyChart } = require('../models');
+    const { chart, publicChart, publicChartTeam, publicChartUser } = t.context;
+    const readonlyChart = await ReadonlyChart.fromPublicChart(publicChart);
+
+    t.true(readonlyChart instanceof ReadonlyChart);
+    // Chart attributes
+    t.is(readonlyChart.id, chart.id);
+    t.is(readonlyChart.theme, chart.theme);
+    t.is(readonlyChart.guest_session, chart.guest_session);
+    t.is(readonlyChart.last_edit_step, chart.last_edit_step);
+    t.is(readonlyChart.published_at, chart.published_at);
+    t.is(readonlyChart.public_url, chart.public_url);
+    t.is(readonlyChart.public_version, chart.public_version);
+    t.is(readonlyChart.deleted, chart.deleted);
+    t.is(readonlyChart.deleted_at, chart.deleted_at);
+    t.is(readonlyChart.forkable, chart.forkable);
+    t.is(readonlyChart.is_fork, chart.is_fork);
+    t.is(readonlyChart.language, chart.language);
+    t.is(readonlyChart.utf8, chart.utf8);
+    // PublicChart attributes
+    t.is(readonlyChart.id, publicChart.id);
+    t.is(readonlyChart.type, publicChart.type);
+    t.is(readonlyChart.title, publicChart.title);
+    t.deepEqual(readonlyChart.metadata, publicChart.metadata);
+    t.is(readonlyChart.external_data, publicChart.external_data);
+    t.is((await readonlyChart.getUser()).id, publicChartUser.id);
+    t.is((await readonlyChart.getTeam()).id, publicChartTeam.id);
+});
+
+test('ReadonlyChart cannot be saved', async t => {
+    const { ReadonlyChart } = require('../models');
+    const { chart } = t.context;
+    const readonlyChart = await ReadonlyChart.fromChart(chart);
+
+    await t.throwsAsync(
+        async () => {
+            await readonlyChart.save();
+        },
+        { instanceOf: ValidationError }
+    );
 });
