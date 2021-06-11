@@ -25,8 +25,7 @@ ReadonlyChart.fromChart = function(chart) {
     return ReadonlyChart.build(chart.get());
 };
 
-ReadonlyChart.fromPublicChart = async function(publicChart) {
-    const chart = await publicChart.getChart();
+ReadonlyChart.fromPublicChart = async function(chart, publicChart) {
     return ReadonlyChart.build({
         ...chart.get(),
         ...pick(publicChart.get(), [

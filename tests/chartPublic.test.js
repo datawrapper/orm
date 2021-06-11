@@ -95,7 +95,7 @@ test('ReadonlyChart.fromChart builds a new chart instance with values from passe
 test('ReadonlyChart.fromPublicChart builds a new chart instance with values from passed public chart', async t => {
     const ReadonlyChart = require('../models/ReadonlyChart');
     const { chart, publicChart, publicChartTeam, publicChartUser } = t.context;
-    const readonlyChart = await ReadonlyChart.fromPublicChart(publicChart);
+    const readonlyChart = await ReadonlyChart.fromPublicChart(chart, publicChart);
 
     t.true(readonlyChart instanceof ReadonlyChart);
     t.truthy(readonlyChart.createdAt);
