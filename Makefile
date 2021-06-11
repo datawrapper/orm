@@ -5,24 +5,31 @@ docker_compose := docker-compose -f docker-compose-test.yml
 
 .PHONY: test
 test: | test-setup  ## Run unit tests
-	$(MAKE) test-shell cmd='cd /app && npm test -- -m "$(m)"'
+	$(MAKE) test-run cmd="sh -c 'cd /app && npm test -- -m \"$(m)\"'"
 
 .PHONY: test-coverage
 test-coverage: | test-setup  ## Run unit tests with coverage report
-	$(MAKE) test-shell cmd='cd /app && npm run test:coverage -- -m "$(m)"'
+	$(MAKE) test-run cmd="sh -c 'cd /app && npm run test:coverage -- -m \"$(m)\"'"
 
 .PHONY: test-setup
 test-setup:  ## Create the testing database if it isn't running
 	[[ -n $$($(docker_compose) ps --services --filter status=running mysql) ]] || \
-		$(MAKE) test-shell cmd='cd /app && script/wait-for-db.sh && node script/sync-db.js'
+		$(MAKE) test-run cmd="sh -c 'cd /app && script/wait-for-db.sh && node script/sync-db.js'"
 
 .PHONY: test-teardown
 test-teardown:  ## Stop and remove the testing database
 	$(docker_compose) down
 
+.PHONY: test-run
+test-run:  ## Run command specified by the variable 'cmd' in the testing node container
+	$(docker_compose) run --rm \
+		-e "DW_CONFIG_PATH=$(DW_CONFIG_PATH)" \
+		-e "NODE_ENV=test" \
+		node $(cmd)
+
 .PHONY: test-shell
-test-shell:  ## Run command specified by the variable 'cmd' in a shell in the testing node container
-	$(docker_compose) run --rm -e "DW_CONFIG_PATH=$(DW_CONFIG_PATH)" -e "NODE_ENV=test" node sh -c '$(cmd)'
+test-shell:  ## Run shell in the testing node container
+	$(MAKE) test-run cmd='bash'
 
 .PHONY: help
 help:
