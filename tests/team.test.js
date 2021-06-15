@@ -1,20 +1,26 @@
 const test = require('ava');
-const { close, init } = require('./index');
-
-/*
- * user 2 is an editor who has one chart
- */
+const { createTeam, createUser, destroy } = require('./helpers/fixtures');
+const { init } = require('./helpers/orm');
 
 test.before(async t => {
-    await init();
-    const { Team } = require('../models');
-    t.context = await Team.findByPk('team-1');
+    t.context.orm = await init();
+
+    t.context.team = await createTeam();
+
+    const promises = Array(3)
+        .fill()
+        .map(() => createUser({ teams: [t.context.team] }));
+    t.context.users = await Promise.all(promises);
+});
+
+test.after.always(async t => {
+    await destroy(t.context.users, t.context.team);
+    await t.context.orm.db.close();
 });
 
 test('team.getUsers returns three users', async t => {
-    t.is(typeof t.context.getUsers, 'function', 'team.getUsers() is undefined');
-    const result = await t.context.getUsers();
+    const { team } = t.context;
+    t.is(typeof team.getUsers, 'function', 'team.getUsers() is undefined');
+    const result = await team.getUsers();
     t.is(result.length, 3);
 });
-
-test.after(t => close);

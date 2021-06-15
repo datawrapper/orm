@@ -15,7 +15,8 @@
     "scripts": {
         "format": "prettier 'models/**/*.js' --write",
         "lint": "prettier --check 'models/**/*.{js,html}' && healthier 'models/**/*.{js,html}'",
-        "test": "DW_CONFIG_PATH=tests/config._test.js ava --verbose"
+        "test": "DW_CONFIG_PATH=${DW_CONFIG_PATH-tests/config.local.js} ava --verbose",
+        "test:coverage": "DW_CONFIG_PATH=${DW_CONFIG_PATH-tests/config.local.js} nyc --reporter=html --reporter=text ava --verbose"
     },
     "repository": {
         "type": "git",
@@ -38,6 +39,7 @@
         "healthier": "~3.2.0",
         "husky": "~1.3.1",
         "lint-staged": "~9.4.2",
+        "nyc": "^15.1.0",
         "prettier": "~1.18.2"
     },
     "lint-staged": {
@@ -73,10 +75,12 @@
         "root": true
     },
     "prettier": {
-        "tabWidth": 4,
-        "semi": true,
+        "arrowParens": "avoid",
         "printWidth": 100,
-        "singleQuote": true
+        "semi": true,
+        "singleQuote": true,
+        "tabWidth": 4,
+        "trailingComma": "none"
     },
     "husky": {
         "hooks": {

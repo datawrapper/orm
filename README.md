@@ -1,4 +1,5 @@
 # datawrapper-orm
+
 A database abstraction layer for Datawrapper
 
 Usage:
@@ -80,4 +81,33 @@ This method is very useful for tests where you only need a special plugin. There
 ```js
 await ORM.init()
 await ORM.registerPlugins()
+```
+
+### Development
+
+#### Unit tests
+
+To run the unit tests, run:
+
+``` shell
+make test
+```
+
+or to run only some tests:
+
+``` shell
+make test m='chart has*'
+```
+
+This will start a Docker container with a testing database, create tables in it, and run the unit
+tests in another container.
+
+The database container will keep running after the tests finish, so you can run `make test`
+repeatedly and it will save some time by reusing the database and its tables.
+
+When you're done developing the unit tests, or when you change database schema, you can stop the
+database Docker container and delete the database using:
+
+``` shell
+make test-teardown
 ```

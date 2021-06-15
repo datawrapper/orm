@@ -1,2 +1,4 @@
-tests/config.js
+.nyc_output
+coverage
 node_modules
+tests/config.js

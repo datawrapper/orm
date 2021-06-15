@@ -35,7 +35,9 @@ const ORM = {
             });
 
             try {
-                await sequelize.query('select id from chart limit 1');
+                if (!config.orm.skipTableTest) {
+                    await sequelize.query('select id from chart limit 1');
+                }
                 ORM.db = sequelize;
                 ORM.db.Op = Sequelize.Op;
                 ORM.db.Sequelize = Sequelize;

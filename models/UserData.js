@@ -22,7 +22,13 @@ const UserData = db.define(
     },
     {
         createdAt: 'stored_at',
-        tableName: 'user_data'
+        tableName: 'user_data',
+        indexes: [
+            {
+                unique: true,
+                fields: ['user_id', 'key']
+            }
+        ]
     }
 );
 

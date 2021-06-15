@@ -18,9 +18,10 @@ const User = db.define(
         reset_password_token: SQ.STRING,
 
         role: {
-            type: SQ.ENUM('admin', 'editor', 'pending', 'guest', 'sysadmin', 'graphic-editor'),
+            type: SQ.INTEGER,
+            values: ['admin', 'editor', 'pending', 'guest', 'sysadmin', 'graphic-editor'],
             allowNull: false,
-            defaultValue: 'pending',
+            defaultValue: 2, // pending
             get() {
                 const role = this.getDataValue('role');
                 return this.rawAttributes.role.values[role];
