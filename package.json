@@ -29,7 +29,7 @@
         "mysql2": "^2.2.5",
         "nanoid": "2.1.6",
         "sequelize": "^6.6.2",
-        "underscore": "1.9.1"
+        "underscore": "1.12.1"
     },
     "devDependencies": {
         "@datawrapper/shared": "^0.27.6",
