@@ -136,11 +136,11 @@ test('ReadonlyChart.fromChart copies included model from passed chart', async t 
     const readonlyChartWithUser = await ReadonlyChart.fromChart(chartWithUser);
     t.is(readonlyChartWithUser.user.id, chartUser.id);
     t.is(readonlyChartWithUser.user.id, readonlyChartWithUser.dataValues.user.id);
+    t.is(readonlyChartWithUser.user.id, readonlyChartWithUser.author_id);
 });
 
 test('ReadonlyChart.fromPublicChart copies included model from passed chart', async t => {
     const Chart = require('../models/Chart');
-    const ChartPublic = require('../models/ChartPublic');
     const ReadonlyChart = require('../models/ReadonlyChart');
     const { chart, chartUser, publicChart, publicChartUser } = t.context;
 
@@ -151,6 +151,9 @@ test('ReadonlyChart.fromPublicChart copies included model from passed chart', as
     const readonlyChartWithUser = await ReadonlyChart.fromPublicChart(chartWithUser, publicChart);
     t.is(readonlyChartWithUser.user.id, chartUser.id);
     t.is(readonlyChartWithUser.user.id, readonlyChartWithUser.dataValues.user.id);
+    // There is no Sequelize association between ChartPublic and User, therefore the `user` property
+    // (copied from Chart) can contain a different user than `author_id` (stored on `PublicChart`).
+    t.not(readonlyChartWithUser.user.id, readonlyChartWithUser.author_id);
 });
 
 test('ReadonlyChart cannot be saved', async t => {
