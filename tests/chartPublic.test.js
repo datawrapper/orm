@@ -124,6 +124,35 @@ test('ReadonlyChart.fromPublicChart builds a new chart instance with values from
     t.is((await readonlyChart.getTeam()).id, publicChartTeam.id);
 });
 
+test('ReadonlyChart.fromChart copies included model from passed chart', async t => {
+    const Chart = require('../models/Chart');
+    const ReadonlyChart = require('../models/ReadonlyChart');
+    const { chart, chartUser } = t.context;
+
+    const readonlyChart = await ReadonlyChart.fromChart(chart);
+    t.is(readonlyChart.user, undefined);
+
+    const chartWithUser = await Chart.findOne({ where: { id: chart.id }, include: 'user' });
+    const readonlyChartWithUser = await ReadonlyChart.fromChart(chartWithUser);
+    t.is(readonlyChartWithUser.user.id, chartUser.id);
+    t.is(readonlyChartWithUser.user.id, readonlyChartWithUser.dataValues.user.id);
+});
+
+test('ReadonlyChart.fromPublicChart copies included model from passed chart', async t => {
+    const Chart = require('../models/Chart');
+    const ChartPublic = require('../models/ChartPublic');
+    const ReadonlyChart = require('../models/ReadonlyChart');
+    const { chart, chartUser, publicChart, publicChartUser } = t.context;
+
+    const readonlyChart = await ReadonlyChart.fromPublicChart(chart, publicChart);
+    t.is(readonlyChart.user, undefined);
+
+    const chartWithUser = await Chart.findOne({ where: { id: chart.id }, include: 'user' });
+    const readonlyChartWithUser = await ReadonlyChart.fromPublicChart(chartWithUser, publicChart);
+    t.is(readonlyChartWithUser.user.id, chartUser.id);
+    t.is(readonlyChartWithUser.user.id, readonlyChartWithUser.dataValues.user.id);
+});
+
 test('ReadonlyChart cannot be saved', async t => {
     const ReadonlyChart = require('../models/ReadonlyChart');
     const { chart } = t.context;
