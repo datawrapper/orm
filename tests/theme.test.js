@@ -115,6 +115,27 @@ test('theme.getMergedData', async t => {
     t.is(data.easing, 'easeInOut');
 });
 
+test('theme.getMergedData does not get stuck in an extend loop', async t => {
+    let theme1;
+    let theme2;
+    try {
+        theme1 = await createTheme({
+            data: { foo: 1 }
+        });
+        theme2 = await createTheme({
+            data: { foo: 2, bar: 2 },
+            extend: theme1.id
+        });
+        theme1.extend = theme2.id;
+        await theme1.save();
+        const data = await theme1.getMergedData();
+        t.deepEqual(data, { foo: 1, bar: 2 });
+    } finally {
+        await destroy(theme1);
+        await destroy(theme2);
+    }
+});
+
 test('theme.getMergedAssets', async t => {
     const { theme1: theme } = t.context;
     t.is(typeof theme.getMergedAssets, 'function', 'theme.getMergedAssets() is undefined');
