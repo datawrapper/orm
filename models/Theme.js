@@ -2,6 +2,8 @@ const SQ = require('sequelize');
 const { db } = require('../index');
 const assign = require('assign-deep');
 
+const MAX_EXTEND_DEPTH = 10;
+
 const Theme = db.define(
     'theme',
     {
@@ -38,8 +40,16 @@ Theme.belongsTo(Theme, { foreignKey: 'extend' });
 Theme.prototype.getMergedData = async function() {
     let theme = this;
     const data = [theme.data];
-    while (theme.get('extend')) {
+    for (let i = 0; i < MAX_EXTEND_DEPTH; i++) {
+        if (!theme.get('extend')) {
+            break;
+        }
         theme = await Theme.findByPk(theme.get('extend'));
+        if (!theme) {
+            // This can happen on a production system that is missing the database constraint saying
+            // that Theme.extend must point to an existing Theme.
+            break;
+        }
         data.push(theme.data);
     }
     let merged = {};
