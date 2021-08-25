@@ -253,7 +253,7 @@ User.prototype.getActiveProduct = async function() {
 User.prototype.getActiveTeam = async function(session) {
     const { getUserData } = require('../utils/userData');
 
-    const teams = await this.getTeams();
+    const teams = this.teams || (await this.getTeams());
     if (teams.length < 1) return null;
 
     let activeTeam = await getUserData(this.id, 'active_team');
