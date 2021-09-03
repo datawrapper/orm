@@ -11,7 +11,7 @@ const User = db.define(
             autoIncrement: true
         },
 
-        email: { type: SQ.STRING, allowNull: false },
+        email: { type: SQ.STRING, allowNull: true, unique: true },
         pwd: { type: SQ.STRING, allowNull: false },
 
         activate_token: SQ.STRING,
