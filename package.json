@@ -24,6 +24,7 @@
     },
     "dependencies": {
         "assign-deep": "^1.0.1",
+        "bullmq": "^1.24.3",
         "lodash": "^4.17.20",
         "merge-deep": "^3.0.2",
         "mysql2": "^2.2.5",
